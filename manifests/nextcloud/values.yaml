@@ -1,0 +1,13 @@
+---
+mariadb:
+  enabled: true
+
+redis:
+  enabled: true
+
+nextcloud:
+  host: nextcloud-127-0-0-1.nip.io
+
+ingress:
+  enabled: true
+  path: /

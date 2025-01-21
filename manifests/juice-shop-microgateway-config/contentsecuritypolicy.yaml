@@ -1,0 +1,14 @@
+---
+apiVersion: microgateway.airlock.com/v1alpha1
+kind: ContentSecurityPolicy
+metadata:
+  name: juice-shop
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: juice-shop
+  secured:
+    filter:
+      denyRulesRef:
+        name: juice-shop

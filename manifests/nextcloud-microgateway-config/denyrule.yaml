@@ -1,0 +1,22 @@
+---
+apiVersion: microgateway.airlock.com/v1alpha1
+kind: DenyRules
+metadata:
+  name: deny-rule-nextcloud
+  namespace: nextcloud
+spec:
+  request:
+    builtIn:
+      settings:
+        level: Standard
+        threatHandlingMode: Block
+      exceptions:
+        # Exclude SQL block for passwords
+        - blockedData:
+            parameter:
+              name:
+                matcher:
+                  exact: password
+          ruleKeys:
+            - SQL
+    custom: {}

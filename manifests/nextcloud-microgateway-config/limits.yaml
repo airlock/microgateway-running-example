@@ -1,0 +1,30 @@
+apiVersion: microgateway.airlock.com/v1alpha1
+kind: Limits
+metadata:
+  name: limits-nextcloud
+spec:
+  settings:
+    threatHandlingMode: Block
+  request:
+    limited:
+      general:
+        bodySize: "100Mi"
+        pathLength: "1Ki"
+      parameter:
+        bodySize: "100Ki"
+        count: 128
+        nameLength: "128"
+        valueLength: "8Ki"
+      json:
+        bodySize: "100Ki"
+        nestingDepth: 100
+        keyCount: 250
+        elementCount: 10000
+        keyLength: "128"
+        valueLength: "64Ki" #increased from 8k due to NC Talk
+      multipart:
+        bodySize: "100Mi"
+      graphQL:
+        querySize: "1Ki"
+        nestingDepth: 10
+        valueLength: "256"

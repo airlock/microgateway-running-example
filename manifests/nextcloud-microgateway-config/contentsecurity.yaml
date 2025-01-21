@@ -1,0 +1,25 @@
+---
+apiVersion: microgateway.airlock.com/v1alpha1
+kind: ContentSecurity
+metadata:
+  name: content-security-nextcloud
+  namespace: nextcloud
+spec:
+  #  parserRef:
+  #    name: parser-example
+
+  limitsRef:
+    name: limits-nextcloud
+
+  headerRewritesRef:
+    name: header-rewrites-nextcloud # Name of the rewrite rule (HeaderRewriteRule)
+
+  filter:
+    denyRulesRef:
+      name: deny-rule-nextcloud # Name of the deny rule (DenyRule)
+
+#  apiProtection:
+#    openAPIRef:
+#      name: open-api-example
+#    graphQLRef:
+#      name: graphql-example

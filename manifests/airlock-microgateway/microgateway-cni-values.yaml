@@ -1,0 +1,4 @@
+---
+config:
+  cniBinDir: "/usr/libexec/cni/"
+  cniNetDir: "/etc/cni/net.d"

@@ -1,0 +1,42 @@
+---
+testFramework:
+  enabled: false
+
+ingress:
+  enabled: true
+  path: /
+  hosts:
+    - grafana-127-0-0-1.nip.io
+
+sidecar:
+  dashboards:
+    enabled: true
+    label: grafana_dashboard
+    labelValue: "1"
+    searchNamespace: ALL
+    folderAnnotation: grafana_folder
+    provider:
+      foldersFromFilesStructure: true
+
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: loki
+        type: loki
+        url: http://loki-gateway/
+        access: proxy
+        version: 1
+        isDefault: true
+        jsonData:
+          maxLines: 1000
+      - name: prometheus
+        type: prometheus
+        url: http://kube-prometheus-stack-prometheus:9090/
+        access: proxy
+        isDefault: false
+
+env:
+  GF_AUTH_ANONYMOUS_ENABLED: true
+  GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
+  GF_USERS_DEFAULT_THEME: light

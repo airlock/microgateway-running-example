@@ -1,0 +1,39 @@
+---
+apiVersion: microgateway.airlock.com/v1alpha1
+kind: HeaderRewrites
+metadata:
+  name: juice-shop
+spec:
+  settings:
+    operationalMode: Production
+  request:
+    allow:
+      matchingHeaders:
+        builtIn:
+          standardHeaders: true
+    remove:
+      builtIn:
+        alternativeForwardedHeaders: true
+    add: {}
+  response:
+    allow:
+      allHeaders: {}
+    remove:
+      builtIn:
+        informationLeakage:
+          server: true
+          application: true
+        auth:
+          basic: false
+          ntlm: true
+          negotiate: true
+        permissiveCors: true
+    add:
+      builtIn:
+        xFrameOptions: true
+        hsts: true
+        hstsPreload: false
+        csp: false # default true
+        xContentTypeOptions: true
+        referrerPolicy: true
+        featurePolicy: true
