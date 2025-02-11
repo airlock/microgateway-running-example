@@ -3,6 +3,7 @@ apiVersion: microgateway.airlock.com/v1alpha1
 kind: HeaderRewrites
 metadata:
   name: juice-shop
+  namespace: juice-shop
 spec:
   settings:
     operationalMode: Production
