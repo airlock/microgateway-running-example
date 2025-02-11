@@ -35,7 +35,8 @@ This repository contains a running example of Airlock Microgateway in Kubernetes
 - Nextcloud via http://nextcloud-127-0-0-1.nip.io/
   - Username: admin
   - Password: changeme
-- Juice Shop via http://juice-shop-127-0-0-1.nip.io/
+- Juice Shop unprotected via http://juice-shop-127-0-0-1.nip.io/
+- Juice Shop protected via http://juice-shop-127-0-0-1.nip.io:8080/
 
 ## Disclaimer
 Airlock Microgateway is available as community and premium edition. See [Community vs. Premium editions in detail](https://docs.airlock.com/microgateway/latest/#data/1675772882054.html) to choose the right license type. Anyway, this example setup can be deployed with Airlock Microgateway both editions.
@@ -178,22 +179,11 @@ kubectl -n nextcloud rollout status deployment
 # Deploy the Airlock Microgateway configuration
 kubectl kustomize --enable-helm manifests/juice-shop-microgateway-config | kubectl apply --server-side -f -
 
-# Adjust the Ingress to be routed through Airlock Microgateway
-kubectl -n juice-shop patch ingress juice-shop -p '{
-"spec": { "rules": [
-    { "host": "juice-shop-127-0-0-1.nip.io",
-      "http": {
-        "paths": [
-          {
-            "path": "/",
-            "pathType": "Prefix",
-            "backend": {
-              "service": {
-                "name": "juice-shop-gateway",
-                "port": {
-                  "number": 8080
-                } } } } ] } } ] } }'
+# The Ingress ressource can now be deleted as it will now be routed through Airlock Microgateway and is no longer needed
+kubectl -n juice-shop delete ingress juice-shop
 ```
+> [!NOTE]
+> You can now access the protected Juice Shop via http://juice-shop-127-0-0-1.nip.io:8080/
 
 ### Sidecar vs sidecarless
 
