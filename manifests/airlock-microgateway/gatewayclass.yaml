@@ -9,4 +9,4 @@ spec:
     group: microgateway.airlock.com
     kind: GatewayParameters
     name: gatewayparameter-juice-shop
-    namespace: juice-shop
+    namespace: airlock-gateway

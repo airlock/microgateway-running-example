@@ -3,7 +3,7 @@ apiVersion: microgateway.airlock.com/v1alpha1
 kind: ContentSecurityPolicy
 metadata:
   name: juice-shop
-  namespace: juice-shop
+  namespace: airlock-gateway
 spec:
   targetRefs:
   - group: gateway.networking.k8s.io

@@ -2,7 +2,7 @@ apiVersion: microgateway.airlock.com/v1alpha1
 kind: GatewayParameters
 metadata:
   name: gatewayparameter-juice-shop
-  namespace: juice-shop
+  namespace: airlock-gateway
 spec:
   logging:
     level: info
