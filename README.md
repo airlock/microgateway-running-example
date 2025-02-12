@@ -179,7 +179,7 @@ kubectl -n nextcloud rollout status deployment
 # Deploy the Airlock Microgateway configuration
 kubectl kustomize --enable-helm manifests/juice-shop-microgateway-config | kubectl apply --server-side -f -
 
-# The Ingress ressource can now be deleted as it will now be routed through Airlock Microgateway and is no longer needed
+# The Ingress ressource can be deleted as it is no longer needed.
 kubectl -n juice-shop delete ingress juice-shop
 ```
 > [!NOTE]
