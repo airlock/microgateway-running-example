@@ -11,3 +11,4 @@ resources:
 - gateway.yaml
 - gatewayparameters.yaml
 - referencegrant.yaml
+- gatewayclass.yaml

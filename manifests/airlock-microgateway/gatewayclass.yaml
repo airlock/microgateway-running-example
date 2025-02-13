@@ -5,8 +5,3 @@ metadata:
   name: airlock-microgateway
 spec:
   controllerName: microgateway.airlock.com/gatewayclass-controller
-  parametersRef:
-    group: microgateway.airlock.com
-    kind: GatewayParameters
-    name: gatewayparameter-juice-shop
-    namespace: airlock-gateway
