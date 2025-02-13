@@ -1,0 +1,13 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: airlock-microgateway
+  namespace: airlock-microgateway
+spec:
+  controllerName: microgateway.airlock.com/gatewayclass-controller
+  parametersRef:
+    group: microgateway.airlock.com
+    kind: GatewayParameters
+    name: gatewayparameter-juice-shop
+    namespace: airlock-gateway
