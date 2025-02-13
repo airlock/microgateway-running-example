@@ -4,7 +4,7 @@ kind: Kustomization
 namespace: juice-shop
 
 resources:
-  - namespace.yaml
-  - deployment.yaml
-  - service.yaml
-  - ingress.yaml
+- namespace.yaml
+- deployment.yaml
+- service.yaml
+- ingress.yaml

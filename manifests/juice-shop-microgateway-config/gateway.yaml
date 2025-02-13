@@ -2,14 +2,15 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: juice-shop-gateway
-  namespace: juice-shop
+  name: gateway-juice-shop
+  namespace: airlock-gateway
 spec:
   gatewayClassName: airlock-microgateway
   listeners:
-    - name: http
-      port: 8080
-      protocol: HTTP
-      allowedRoutes:
-        namespaces:
-          from: All
+  - name: http
+    port: 8080
+    hostname: "juice-shop-127-0-0-1.nip.io"
+    protocol: HTTP
+    allowedRoutes:
+      namespaces:
+        from: All
