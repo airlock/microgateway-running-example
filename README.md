@@ -48,7 +48,7 @@ Airlock Microgateway is available as community and premium edition. See [Communi
 * Install [Rancher Desktop](https://docs.rancherdesktop.io/getting-started/installation/).
 
 > [!NOTE]
-> This example is built for Rancher Desktop. Nevertheless, it should also work with any other Kubernetes distributions. Simply ensure the following:
+> This example is built for Rancher Desktop with containerd as container engine. Nevertheless, it should also work with any other Kubernetes distributions. Simply ensure the following:
 > * Ensure the [Airlock Microgateway requirements](https://docs.airlock.com/microgateway/latest/#data/1660804711882.html) are met.
 > * [kubectl](https://kubernetes.io/docs/reference/kubectl/overview/) is installed.
 > * [helm](https://helm.sh/docs/intro/install/) is installed.

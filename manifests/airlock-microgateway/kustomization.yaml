@@ -11,12 +11,12 @@ helmCharts:
   releaseName: airlock-microgateway
   namespace: kube-system
   repo: oci://quay.io/airlockcharts
-  version: 4.5.0
+  version: 4.5.1
   valuesFile: microgateway-cni-values.yaml
 - name: microgateway
   releaseName: airlock-microgateway
   namespace: airlock-microgateway-system
   repo: oci://quay.io/airlockcharts
-  version: 4.5.0
+  version: 4.5.1
   valuesFile: microgateway-values.yaml
   includeCRDs: true
