@@ -1,0 +1,58 @@
+---
+apiVersion: microgateway.airlock.com/v1alpha1
+kind: OIDCRelyingParty
+metadata:
+  name: webserver-admin
+  namespace: oidc
+spec:
+  oidcProviderRef:
+    name: webserver
+  clientID: <enter your Application (client) ID here>
+  scopes:
+  - 'openid'
+  - 'profile'
+  - 'email'
+  credentials:
+    clientSecret:
+      method: BasicAuth
+      secretRef:
+        name: oidc-client-password
+  pathMapping:
+    logoutPath:
+      matcher:
+        exact: /admin/logout
+    redirectPath:
+      matcher:
+        exact: /admin/callback
+  redirectURI: "https://%REQ(:authority)%/admin/callback"
+
+# Entra admin center --> Applications --> App registrations --> Overview --> Application (client) ID
+---
+apiVersion: microgateway.airlock.com/v1alpha1
+kind: OIDCRelyingParty
+metadata:
+  name: webserver-user
+  namespace: oidc
+spec:
+  oidcProviderRef:
+    name: webserver
+  clientID: <enter your Application (client) ID here>
+  scopes:
+  - 'openid'
+  - 'profile'
+  - 'email'
+  credentials:
+    clientSecret:
+      method: BasicAuth
+      secretRef:
+        name: oidc-client-password
+  pathMapping:
+    logoutPath:
+      matcher:
+        exact: /user/logout
+    redirectPath:
+      matcher:
+        exact: /user/callback
+  redirectURI: "https://%REQ(:authority)%/user/callback"
+
+# Entra admin center --> Applications --> App registrations --> Overview --> Application (client) ID
