@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: apache-html
+  namespace: oidc
+data:
+  index.html: |
+    <html>
+      <head><title>Apache WebServer - Home</title></head>
+      <body>
+        <h1>Hello!</h1>
+        <p>Access to <a href="/user"><strong>/user</strong></a> is just for members of the <strong>mgwuser</strong> group.</p>
+        <p>Access to <a href="/admin"><strong>/admin</strong></a> is just for members of the <strong>mgwadmin</strong> group!</p>
+      </body>
+    </html>
+
+  user.html: |
+    <html>
+      <head><title>User Zone</title></head>
+      <body>
+        <h1>Welcome to the user zone</h1>
+        <p><a href="/index.html">Back to Home</a></p>
+      </body>
+    </html>
+
+  admin.html: |
+    <html>
+      <head><title>Admin Zone</title></head>
+      <body>
+        <h1>Welcome to the admin zone</h1>
+        <p><a href="/index.html">Back to Home</a></p>
+      </body>
+    </html>

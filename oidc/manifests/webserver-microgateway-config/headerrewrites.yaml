@@ -1,0 +1,32 @@
+---
+apiVersion: microgateway.airlock.com/v1alpha1
+kind: HeaderRewrites
+metadata:
+  name: webserver
+  namespace: oidc
+spec:
+  settings:
+    operationalMode: Integration
+  request:
+    remove:
+      builtIn:
+        alternativeForwardedHeaders: true
+    allow:
+      matchingHeaders:
+        builtIn:
+          standardHeaders: true
+  response:
+    remove:
+      builtIn:
+        informationLeakage:
+          application: true
+          server: true
+    add:
+      builtIn:
+        csp: false
+        featurePolicy: true
+        hsts: true
+        hstsPreload: false
+        referrerPolicy: true
+        xContentTypeOptions: true
+        xFrameOptions: true
