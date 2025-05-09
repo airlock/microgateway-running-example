@@ -24,10 +24,10 @@
 | Path | Description |
 |------|-------------|
 | `/` | Public |
-| `/user` | User role required (Microsoft tenant) |
-| `/admin` | Admin role required (Microsoft tenant) |
+| `/user` | User role required (group assigned to user account in Azure Entra ID tenant) |
+| `/admin` | Admin role required (group assigned to user account in Azure Entra ID tenant) |
 
-- webserver Base URL: https://webserver-127-0-0-1.nip.io:8081/
+- Webserver Base URL: https://webserver-127-0-0-1.nip.io:8081/
 
 ---
 
@@ -41,9 +41,15 @@
 > * [helm](https://helm.sh/docs/intro/install/) is installed.
 > * [kustomize](https://kustomize.io) >= 5.2.1 is installed.
 > * An Ingress Controller (e.g. Traefik, Ingress Nginx, ...) is deployed.
+>
+>   Please keep in mind, this is not a necessity for your deployments as Airlock Microgateway is fully compliant with Kubernetes Gateway API and can fulfill the Ingress function itself. It is just a lot easier to get the demo running.
 
 ## Airlock OIDC Microgateway prerequisites
-### If one of it is missing, please install it according to the [web protection](../web-protect) example
+
+This example is implemented on top of the base demo, [web protection](../web-protect). Please ensure you have it already set up correctly.
+
+**If any of the prerequisites is missing, please install it according to the [web protection](../web-protect) example**
+
 > * Microgateway with valid license and experimental Gateway API CRDs is deployed 
 > * cert-manager is deployed
 > * logging, monitoring and reporting stack is deployed
@@ -71,7 +77,7 @@ kubectl -n oidc rollout status deployment webserver
 ```
 
  > [!WARNING] 
- > If the Microgateway was already deployed and you switched the Gateway API standard to *experimental* (which is required for this example), you may encounter a 500 error.  
+ > If Airlock Microgateway was already deployed and you switched the Gateway API standard to *experimental* (which is required for this example), you may encounter an "error 500".
  > To resolve this:  
  > 1. Delete the Microgateway operator pods. They will restart automatically with the new *experimental* Gateway API CRDs.  
  > 2. Then, delete and reapply the `BackendTLSPolicy` manually.  
@@ -93,10 +99,9 @@ Sidecarless Base URL: https://webserver-127-0-0-1.nip.io:8081/
 | /user  | Authentication required                                                |
 
 ## ⚠️ Important Notes
-- The limit of Groups in a Token is limited to 200 via OIDC my Microsoft.
-- In larger Organisations it can easiely happen that a user may reach this limit.
-- To avoid it the Administrator should assign the Application the relevant Group memberships and then just activate just
-- Groups assigned to the application (recommended for large enterprise companies to avoid exceeding the limit on the number of groups a token can emit)
+- The limit of Groups in an OIDC token is limited to 200 by Microsoft.
+- In larger organisations this limit can easiely be exceeded.
+- To avoid running into issues due to this limit, an Entra ID administrator should assign the registered OIDC application only the relevant group memberships (recommended for larger enterprises)
 
 ---
 
