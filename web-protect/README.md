@@ -25,10 +25,11 @@
 
 | Application | URL |
 |------------|-----|
-| Grafana | http://grafana-127-0-0-1.nip.io/ |
-| Prometheus | http://prometheus-127-0-0-1.nip.io/ |
-| Nextcloud | http://nextcloud-127-0-0-1.nip.io/ (admin/changeme) |
-| Juice Shop | [Unprotected](http://juice-shop-127-0-0-1.nip.io/), [Protected](http://juice-shop-127-0-0-1.nip.io:8080/) |
+| Grafana | [http://grafana-127-0-0-1.nip.io/](http://grafana-127-0-0-1.nip.io/) |
+| Prometheus | [http://prometheus-127-0-0-1.nip.io/](http://nextcloud-127-0-0-1.nip.io/) |
+| Nextcloud | [http://nextcloud-127-0-0-1.nip.io/](http://nextcloud-127-0-0-1.nip.io/) (Login: admin/changeme) |
+| Juice Shop, unprotected | [http://juice-shop-127-0-0-1.nip.io/](http://juice-shop-127-0-0-1.nip.io/) |
+| Juice Shop, protected | [[http://juice-shop-127-0-0-1.nip.io:8080/](http://juice-shop-127-0-0-1.nip.io:8080/) |
 
 ---
 
@@ -48,6 +49,8 @@
 > * [helm](https://helm.sh/docs/intro/install/) is installed.
 > * [kustomize](https://kustomize.io) >= 5.2.1 is installed.
 > * An Ingress Controller (e.g. Traefik, Ingress Nginx, ...) is deployed.
+>   
+>   Please keep in mind, this is not a necessity for your deployments as Airlock Microgateway is fully compliant with Kubernetes Gateway API and can fulfill the Ingress function itself. It is just a lot easier to get the demo running.
 
 ## 🛠 Deployment Steps
 
@@ -55,7 +58,7 @@
 1. Either request a community license free of charge or purchase a premium license.
    * Community license: [airlock.com/microgateway-community](https://airlock.com/en/microgateway-community)
    * Premium license: [airlock.com/microgateway-premium](https://airlock.com/en/microgateway-premium)
-2. Check your mailbox and save the license file `microgateway-license.txt` locally (replace the existing file).
+2. Check your mailbox and save the license file `microgateway-license.txt` locally (replace any existing file).
 3. Deploy the Airlock Microgateway license
 ```bash
 # Create the airlock-microgateway-system namespace
@@ -96,7 +99,7 @@ kubectl -n monitoring rollout status deployment,daemonset,statefulset
 
 ### Deploy Airlock Microgateway
 > [!TIP]
-> Certain environments such as OpenShift or GKE require non-default configurations when installing the CNI plugin. In case that the CNI plugin does not start properly consult the [Troubleshooting Microgateway CNI article](https://docs.airlock.com/microgateway/latest/#data/1710781909882.html).
+> Certain environments such as OpenShift or GKE require non-default configurations when installing the CNI plugin. In case that the CNI plugin does not start properly consult [Troubleshooting Microgateway CNI](https://docs.airlock.com/microgateway/latest/#data/1710781909882.html).
 
 > [!NOTE]
 > In case this example is not deployed in Rancher Desktop, most likely the `cniBinDir`and `cniNetDir`in the file `manifests/airlock-microgateway/microgateway-cni-values.yaml` must be adjusted.
