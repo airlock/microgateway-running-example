@@ -53,6 +53,77 @@ This example is implemented on top of the base demo, [web protection](../web-pro
 > * cert-manager is deployed
 > * logging, monitoring and reporting stack is deployed
 
+## Entra ID Prerequisites
+
+To run this example, make sure your Entra application is properly configured with the required data:
+
+---
+
+### **Required IDs and Secrets**
+
+- **Group IDs:**  
+  To find the Group IDs, navigate to **Entra Admin Center** → **Groups** → **All groups** and note the **Object ID** for each relevant group:
+  - **User Group ID** (e.g., for regular users)
+  - **Admin Group ID** (e.g., for administrators)
+
+- **Tenant ID:**  
+  Located on the **Home** page of the **Entra Admin Center**.
+
+- **Client ID:**  
+  Navigate to **Entra Admin Center** → **Applications** → **App registrations** → **Overview** → **Application (client) ID**.
+
+- **Client Secret:**  
+  Navigate to **Entra Admin Center** → **Applications** → **App registrations** → **Certificates & Secrets** → **Client Secrets** → **New client secret**.  
+  **⚠️ Note:** The secret value is only visible immediately after creation.
+
+- **Token and Redirect URI Configuration:**  
+  Ensure the application is configured to send groups as part of the token and that the correct redirect URIs are set.
+
+---
+
+### **Configuration Visual Guide**
+
+To assist you, here are the key steps in image form. Click the thumbnails for a larger view:
+
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+    <figure style="display: inline-block; text-align: center; margin: 10px;">
+        <a href="media/01.png" target="_blank">
+            <img src="media/01.png" alt="Tenant ID" width="150">
+        </a>
+        <figcaption>Tenant ID</figcaption>
+    </figure>
+    <figure style="display: inline-block; text-align: center; margin: 10px;">
+        <a href="media/02.png" target="_blank">
+            <img src="media/02.png" alt="App Registration" width="150">
+        </a>
+        <figcaption>App Registration</figcaption>
+    </figure>
+    <figure style="display: inline-block; text-align: center; margin: 10px;">
+        <a href="media/03.png" target="_blank">
+            <img src="media/03.png" alt="Application (client) ID" width="150">
+        </a>
+        <figcaption>Application (client) ID</figcaption>
+    </figure>
+    <figure style="display: inline-block; text-align: center; margin: 10px;">
+        <a href="media/04.png" target="_blank">
+            <img src="media/04.png" alt="Redirect URIs" width="150">
+        </a>
+        <figcaption>Redirect URIs</figcaption>
+    </figure>
+    <figure style="display: inline-block; text-align: center; margin: 10px;">
+        <a href="media/05.png" target="_blank">
+            <img src="media/05.png" alt="Client Secret" width="150">
+        </a>
+        <figcaption>Client Secret</figcaption>
+    </figure>
+    <figure style="display: inline-block; text-align: center; margin: 10px;">
+        <a href="media/06.png" target="_blank">
+            <img src="media/06.png" alt="Token Configuration" width="150">
+        </a>
+        <figcaption>Token Configuration</figcaption>
+    </figure>
+</div>
+
 ---
 
 ## 🛠 Deployment Steps
@@ -86,6 +157,117 @@ kubectl -n oidc rollout status deployment webserver
  
  kubectl delete -n oidc backendtlspolicies.gateway.networking.k8s.io webserver-tls && kubectl apply -f manifests/webserver-microgateway-config/backendtlspolicy.yaml
  ```
+
+## Add the Entra data into our deployment.
+**⚠️ Note:** kubectl commands are Linux based and may have to be adjusted for MacOS and Windows!
+```bash
+# Patch of the user group
+kubectl patch AccessControlPolicy.microgateway.airlock.com webserver \
+  -n oidc \
+  --type='json' \
+  -p='[
+    {
+      "op": "replace",
+      "path": "/spec/policies/0/authorization/requireAll/0/oidc/claim/value/matcher/contains",
+      "value": "<enter object id of the user group here>"
+    },
+    {
+      "op": "replace",
+      "path": "/spec/policies/1/authorization/requireAll/0/oidc/claim/value/matcher/contains",
+      "value": "<enter object id of the admin group here>"
+    }
+  ]'
+
+```
+```bash
+# Patch of the admin group
+kubectl patch AccessControlPolicy webserver \
+  -n oidc \
+  --type='json' \
+  -p='[
+    {
+      "op": "replace",
+      "path": "/spec/policies/1/authorization/requireAll/0/oidc/claim/value/matcher/contains",
+      "value": "<enter object id of the admin group here>"
+    }
+  ]'
+```
+```bash
+# Patch of the Tenant ID for JWKS
+kubectl patch JWKS webserver \
+  -n oidc \
+  --type='json' \
+  -p='[
+    {
+      "op": "replace",
+      "path": "/spec/provider/remote/uri",
+      "value": "https://login.microsoftonline.com/<enter your tenant id here>/discovery/v2.0/keys"
+    }
+  ]'
+```
+```bash
+# Patch of the client secret
+# Secret has to be in base64 encoded format
+# echo -n "<enter the client secret (value) here>" | base64
+kubectl patch secret oidc-client-password \
+  -n oidc \
+  --type='json' \
+  -p='[
+    {
+      "op": "replace",
+      "path": "/stringData/client.secret",
+      "value": "<enter the client secret (value) base64 encoded here>"
+    }
+  ]'
+```
+```bash
+# Patch of the issuer URI
+kubectl patch OIDCProvider webserver \
+  -n oidc \
+  --type='json' \
+  -p='[
+    {
+      "op": "replace",
+      "path": "/spec/static/issuer",
+      "value": "https://login.microsoftonline.com/<enter your tenant id here>/v2.0"
+    },
+    {
+      "op": "replace",
+      "path": "/spec/static/endpoints/authorization/uri",
+      "value": "https://login.microsoftonline.com/<enter your tenant id here>/oauth2/v2.0/authorize"
+    },
+    {
+      "op": "replace",
+      "path": "/spec/static/endpoints/token/uri",
+      "value": "https://login.microsoftonline.com/<enter your tenant id here>/oauth2/v2.0/token"
+    }
+  ]'
+```
+```bash
+# Patch for webserver-admin
+kubectl patch OIDCRelyingParty webserver-admin \
+  -n oidc \
+  --type='json' \
+  -p='[
+    {
+      "op": "replace",
+      "path": "/spec/clientID",
+      "value": "<enter your Application (client) ID here>"
+    }
+  ]'
+
+# Patch for webserver-user
+kubectl patch OIDCRelyingParty webserver-user \
+  -n oidc \
+  --type='json' \
+  -p='[
+    {
+      "op": "replace",
+      "path": "/spec/clientID",
+      "value": "<enter your Application (client) ID here>"
+    }
+  ]'
+```
 
 
 ## Authentication with browser
