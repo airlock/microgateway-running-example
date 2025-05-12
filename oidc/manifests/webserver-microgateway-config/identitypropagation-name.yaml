@@ -1,0 +1,14 @@
+---
+apiVersion: microgateway.airlock.com/v1alpha1
+kind: IdentityPropagation
+metadata:
+  name: webserver-name
+  namespace: oidc
+spec:
+  header:
+    name: X-USER-NAME
+    value:
+      source:
+        oidc:
+          idToken:
+            claim: "name"

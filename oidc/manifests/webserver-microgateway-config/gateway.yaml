@@ -1,0 +1,26 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: gateway-webserver
+  namespace: airlock-gateway-auth
+spec:
+  infrastructure:
+    parametersRef:
+      group: microgateway.airlock.com
+      kind: GatewayParameters
+      name: gatewayparameters-auth
+  gatewayClassName: airlock-microgateway
+  listeners:
+  - name: https
+    port: 8081
+    hostname: "webserver-127-0-0-1.nip.io"
+    protocol: HTTPS
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - kind: Secret
+        name: webserver-tls-cert
+    allowedRoutes:
+      namespaces:
+        from: All

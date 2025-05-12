@@ -1,0 +1,21 @@
+---
+apiVersion: microgateway.airlock.com/v1alpha1
+kind: OIDCProvider
+metadata:
+  name: webserver
+  namespace: oidc
+spec:
+  static:
+    issuer: https://login.microsoftonline.com/<enter your tenant id here>/v2.0
+    endpoints:
+      authorization:
+        uri: https://login.microsoftonline.com/<enter your tenant id here>/oauth2/v2.0/authorize
+      token:
+        uri: https://login.microsoftonline.com/<enter your tenant id here>/oauth2/v2.0/token
+    tokenValidation:
+      idToken:
+        signatureVerification:
+          jwksRef:
+            name: webserver
+
+# Tenant ID is directly visible in the Home of Entra admin center

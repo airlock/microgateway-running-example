@@ -1,0 +1,19 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: redis-client-cert
+  namespace: airlock-gateway-auth
+spec:
+  dnsNames:
+  - webserver.oidc.svc.cluster.local
+  issuerRef:
+    kind: ClusterIssuer
+    name: cluster-ca-issuer
+  secretName: redis-client-cert
+  usages:
+  - client auth
+  privateKey:
+    size: 4096
+
+  commonName: "CN=webserver.oidc.svc.cluster.local"

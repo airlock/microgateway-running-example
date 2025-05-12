@@ -1,0 +1,11 @@
+---
+apiVersion: microgateway.airlock.com/v1alpha1
+kind: IdentityPropagation
+metadata:
+  name: webserver-bearer-token
+  namespace: oidc
+spec:
+  bearerToken:
+    source:
+      oidc:
+        accessToken: {}
