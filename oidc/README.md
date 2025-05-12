@@ -85,44 +85,54 @@ To run this example, make sure your Entra application is properly configured wit
 
 To assist you, here are the key steps in image form. Click the thumbnails for a larger view:
 
-<div style="display: flex; flex-wrap: wrap; gap: 10px;">
-    <figure style="display: inline-block; text-align: center; margin: 10px;">
-        <a href="media/01.png" target="_blank">
-            <img src="media/01.png" alt="Tenant ID" width="150">
-        </a>
-        <figcaption>Tenant ID</figcaption>
-    </figure>
-    <figure style="display: inline-block; text-align: center; margin: 10px;">
-        <a href="media/02.png" target="_blank">
-            <img src="media/02.png" alt="App Registration" width="150">
-        </a>
-        <figcaption>App Registration</figcaption>
-    </figure>
-    <figure style="display: inline-block; text-align: center; margin: 10px;">
-        <a href="media/03.png" target="_blank">
-            <img src="media/03.png" alt="Application (client) ID" width="150">
-        </a>
-        <figcaption>Application (client) ID</figcaption>
-    </figure>
-    <figure style="display: inline-block; text-align: center; margin: 10px;">
-        <a href="media/04.png" target="_blank">
-            <img src="media/04.png" alt="Redirect URIs" width="150">
-        </a>
-        <figcaption>Redirect URIs</figcaption>
-    </figure>
-    <figure style="display: inline-block; text-align: center; margin: 10px;">
-        <a href="media/05.png" target="_blank">
-            <img src="media/05.png" alt="Client Secret" width="150">
-        </a>
-        <figcaption>Client Secret</figcaption>
-    </figure>
-    <figure style="display: inline-block; text-align: center; margin: 10px;">
-        <a href="media/06.png" target="_blank">
-            <img src="media/06.png" alt="Token Configuration" width="150">
-        </a>
-        <figcaption>Token Configuration</figcaption>
-    </figure>
-</div>
+<table>
+  <tr>
+    <td align="center">
+      <a href="media/01.png" target="_blank">
+        <img src="media/01.png" alt="Tenant ID" width="150">
+      </a>
+      <br>
+      Tenant ID
+    </td>
+    <td align="center">
+      <a href="media/02.png" target="_blank">
+        <img src="media/02.png" alt="App Registration" width="150">
+      </a>
+      <br>
+      App Registration
+    </td>
+    <td align="center">
+      <a href="media/03.png" target="_blank">
+        <img src="media/03.png" alt="Application (client) ID" width="150">
+      </a>
+      <br>
+      Application (client) ID
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="media/04.png" target="_blank">
+        <img src="media/04.png" alt="Redirect URIs" width="150">
+      </a>
+      <br>
+      Redirect URIs
+    </td>
+    <td align="center">
+      <a href="media/05.png" target="_blank">
+        <img src="media/05.png" alt="Client Secret" width="150">
+      </a>
+      <br>
+      Client Secret
+    </td>
+    <td align="center">
+      <a href="media/06.png" target="_blank">
+        <img src="media/06.png" alt="Token Configuration" width="150">
+      </a>
+      <br>
+      Token Configuration
+    </td>
+  </tr>
+</table>
 
 ---
 
