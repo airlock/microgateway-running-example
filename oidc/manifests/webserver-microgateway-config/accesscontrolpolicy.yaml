@@ -1,0 +1,66 @@
+---
+apiVersion: microgateway.airlock.com/v1alpha1
+kind: AccessControlPolicy
+metadata:
+  name: webserver
+  namespace: oidc
+spec:
+  targetRefs:
+  - group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    name: webserver
+  policies:
+  - requestConditions:
+      path:
+        matcher:
+          prefix: /user
+    authorization:
+      requireAll:
+      - oidc:
+          claim:
+            name: groups
+            value:
+              matcher:
+                contains: '<enter object id of the group here>'
+      authentication:
+        oidc:
+          oidcRelyingPartyRef:
+            name: webserver-user
+    identityPropagation:
+      onFailure: Pass
+      actions:
+      - identityPropagationRef:
+          name: webserver-bearer-token
+      - identityPropagationRef:
+          name: webserver-name
+      - identityPropagationRef:
+          name: webserver-email
+  - requestConditions:
+      path:
+        matcher:
+          prefix: /admin
+    authorization:
+      requireAll:
+      - oidc:
+          claim:
+            name: groups
+            value:
+              matcher:
+                contains: '<enter object id of the group here>'
+      authentication:
+        oidc:
+          oidcRelyingPartyRef:
+            name: webserver-admin
+    identityPropagation:
+      onFailure: Pass
+      actions:
+      - identityPropagationRef:
+          name: webserver-bearer-token
+      - identityPropagationRef:
+          name: webserver-name
+      - identityPropagationRef:
+          name: webserver-email
+  # Fallback policy: All other requests (including /) are allowed (authorization disabled).
+  - authorization: {}
+
+# Entra admin center --> Groups --> All groups --> Object Id of the group

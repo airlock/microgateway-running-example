@@ -1,0 +1,13 @@
+---
+apiVersion: microgateway.airlock.com/v1alpha1
+kind: DenyRules
+metadata:
+  name: juice-shop
+  namespace: juice-shop
+spec:
+  request:
+    builtIn:
+      settings:
+        level: Strict
+        threatHandlingMode: Block
+    custom: {}

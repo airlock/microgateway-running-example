@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webserver
+  namespace: oidc
+  labels:
+    app.kubernetes.io/name: webserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: webserver
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: webserver
+    spec:
+      containers:
+      - name: webserver
+        image: httpd:2.4
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        - containerPort: 8443
+        volumeMounts:
+        - name: config
+          mountPath: /usr/local/apache2/conf/httpd.conf
+          subPath: httpd.conf
+        - name: apache-html
+          mountPath: /usr/local/apache2/htdocs/
+        - name: apache-tls-cert
+          mountPath: /etc/apache2/certs/
+          readOnly: true
+      volumes:
+      - name: config
+        configMap:
+          name: webserver-config
+      - name: apache-html
+        configMap:
+          name: apache-html
+      - name: apache-tls-cert
+        secret:
+          secretName: apache-tls-cert

@@ -1,0 +1,12 @@
+---
+apiVersion: microgateway.airlock.com/v1alpha1
+kind: DenyRules
+metadata:
+  name: webserver
+  namespace: oidc
+spec:
+  request:
+    builtIn:
+      settings:
+        level: Strict
+        threatHandlingMode: LogOnly

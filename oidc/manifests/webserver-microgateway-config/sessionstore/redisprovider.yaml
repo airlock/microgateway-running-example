@@ -1,0 +1,26 @@
+---
+apiVersion: microgateway.airlock.com/v1alpha1
+kind: RedisProvider
+metadata:
+  name: sessionagent
+  namespace: airlock-gateway-auth
+spec:
+  mode:
+    standalone:
+      host: redis-master.redis.svc.cluster.local
+      port: 7777
+  tls:
+    certificateVerification:
+      #disabled: {}
+      custom:
+        trustedCA:
+          certificates:
+          - secretRef:
+              name: airlock-ca
+    clientCertificate:
+      secretRef:
+        name: redis-client-cert
+  auth:
+    password:
+      secretRef:
+        name: redis-password

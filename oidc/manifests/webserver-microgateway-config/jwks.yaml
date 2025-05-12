@@ -1,0 +1,14 @@
+---
+apiVersion: microgateway.airlock.com/v1alpha1
+kind: JWKS
+metadata:
+  name: webserver
+  namespace: oidc
+spec:
+  provider:
+    remote:
+      uri: https://login.microsoftonline.com/<enter your tenant id here>/discovery/v2.0/keys
+      timeouts:
+        connect: 5s
+
+# Tenant ID is directly visible in the Home of the Entra admin center
