@@ -4,20 +4,25 @@
   <img src="https://raw.githubusercontent.com/airlock/microgateway/main/media/Microgateway_Labeled_AlignRight.svg" alt="Microgateway Logo" width="250">
 </p>
 
-> **Airlock Microgateway** is a **Kubernetes-native WAAP** (Web Application and API Protection) solution designed to secure microservices and web applications with robust, production-ready security features.
+**Airlock Microgateway** is a **Kubernetes-native WAAP** (Web Application and API Protection, formerly known as WAF) solution designed to secure microservices and web applications with robust, production-ready security features.
 
 ---
 
 ## 🔒 Why Airlock Microgateway?
 
-In modern DevSecOps pipelines, security and, therefore, WAAP solution (formerly known as WAF) must be agile, scalable, and seamlessly integrated into the CI/CD lifecycle.
+In modern DevSecOps pipelines, security and therefore a WAAP solution must be agile, scalable, and seamlessly integrated into the CI/CD lifecycle.
 Airlock Microgateway is the perfect fit for these requirements, as it is optimized for Kubernetes environments.
 
- **Airlock Microgateway**:
+ **Benefits**:
 
-- Embeds enterprise-grade protection directly into Kubernetes environments.
-- Supports both **sidecarless** (Gateway API) and **sidecar** architectures.
-- Is lightweight, fast to deploy, and supports community and enterprise licensing models.
+- **Comprehensive WAAP**: Robust security through continuously improved deny rules to provide protection for [OWASP Top 10](https://owasp.org/www-project-top-ten/) attacks, API schema enforcement for OpenAPI and GraphQL, and insightful dashboards.
+- **Identity Aware Proxy**: Enforces secure, modern authentication mechanisms with fine-grained access control for web applications and APIs.
+- **Seamless Platform Integration**: Integrates effortlessly with Kubernetes-native tools and service meshes like kubectl, [ArgoCD](https://argo-cd.readthedocs.io), [FluxCD](https://fluxcd.io), [Helm](https://helm.sh), [Cilium](https://docs.cilium.io), and [Istio](https://istio.io).
+- **Frictionless DevSecOps Process**: Streamlines technical and business process integration, enabling secure and agile development through Shift-Left and GitOps based controls.
+- **Enables Hybrid Cloud Strategy**: Supports platform engineering across hybrid and multi-cloud environments, easing governance and aligning with Kubernetes-based infrastructure best practices.
+- **Interoperability by Design**: Built on open standards like [Kuberentes Gateway API](https://gateway-api.sigs.k8s.io), [OIDC](https://openid.net), [JWT](https://jwt.io) and proven technologies such as [Elastic Common Schema](https://www.elastic.co/docs/reference/ecs), [Prometheus](https://prometheus.io), [Grafana](https://grafana.com), [Red Hat OpenShift](https://www.redhat.com/en/technologies/cloud-computing/openshift), [Rancher](https://www.rancher.com) to ensures flexibility, avoid vendor lock-in, and supports migration across platforms.
+
+For a list of all features, view the [comparison of the community and premium edition](https://docs.airlock.com/microgateway/latest/?topic=MGW-00000056).
 
 ---
 
