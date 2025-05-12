@@ -168,8 +168,13 @@ kubectl -n oidc rollout status deployment webserver
  kubectl delete -n oidc backendtlspolicies.gateway.networking.k8s.io webserver-tls && kubectl apply -f manifests/webserver-microgateway-config/backendtlspolicy.yaml
  ```
 
-## Add the Entra data into our deployment.
-**⚠️ Note:** kubectl commands are Linux based and may have to be adjusted for MacOS and Windows!
+## Adding Entra Data to Your Deployment
+
+Integrating Entra data into your deployment is a crucial step to ensure your application is properly configured for authentication and authorization.
+
+⚠️ **Important Note:**  
+The provided `kubectl` commands are optimized for **Linux** environments. If you are using **macOS** or **Windows**, you may need to adjust the commands accordingly.
+
 ```bash
 # Patch of the user group
 kubectl patch AccessControlPolicy.microgateway.airlock.com webserver \
