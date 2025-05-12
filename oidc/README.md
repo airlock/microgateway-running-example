@@ -4,7 +4,8 @@
   <img src="https://raw.githubusercontent.com/airlock/microgateway/main/media/Microgateway_Labeled_AlignRight.svg" alt="Microgateway Logo" width="250">
 </p>
 
-> Extend your secure deployment by integrating **authentication and authorization** via **OIDC (OpenID Connect)**.
+Extend your secure deployment by integrating **authentication and authorization** via **OIDC (OpenID Connect)**.
+
 ---
 
 ## 🖼 Architecture Overview
@@ -13,9 +14,9 @@
 
 **Flow Summary:**
 - Requests routed through **Traefik Ingress**
-- Services protected via **Airlock Microgateway Gateway API**
-- Observability stack (Prometheus, Grafana, Loki)
-- Authentication via **Microsoft Entra ID (Azure AD)**
+- Services protected with **Airlock Microgateway** in **sidecarless data plane mode**
+- Observability stack (Prometheus, Grafana, Loki, Promtail)
+- Authentication via **Microsoft Entra ID (formerly known as Azure AD)**
 
 ---
 
@@ -41,8 +42,6 @@
 > * [helm](https://helm.sh/docs/intro/install/) is installed.
 > * [kustomize](https://kustomize.io) >= 5.2.1 is installed.
 > * An Ingress Controller (e.g. Traefik, Ingress Nginx, ...) is deployed.
->
->   Please keep in mind, this is not a necessity for your deployments as Airlock Microgateway is fully compliant with Kubernetes Gateway API and can fulfill the Ingress function itself. It is just a lot easier to get the demo running.
 
 ## Airlock OIDC Microgateway prerequisites
 
@@ -62,12 +61,12 @@ This example is implemented on top of the base demo, [web protection](../web-pro
 
 ## Deploy CA
 ```bash
-kubectl kustomize --enable-helm manifests/ca | k apply --server-side -f -
+kubectl kustomize --enable-helm manifests/ca | kubectl apply --server-side -f -
 ```
 
 ## Deploy Redis
 ```bash
-kubectl kustomize --enable-helm manifests/redis-sessionstore | k apply --server-side -f -
+kubectl kustomize --enable-helm manifests/redis-sessionstore | kubectl apply --server-side -f -
 ```
 
 ## Deploy Webserver
@@ -114,7 +113,7 @@ Sidecarless Base URL: https://webserver-127-0-0-1.nip.io:8081/
   * [Troubleshooting](https://docs.airlock.com/microgateway/latest/#data/1659430054787.html)
   * [API Reference](https://docs.airlock.com/microgateway/latest/index/api/crds/index.html)
 * [Release Repository](https://github.com/airlock/microgateway)
-* [Airlock Microgateway labs](https://play.instruqt.com/airlock/invite/hyi9fy4b4jzc?icp_referrer=github.com)
+* [Airlock Microgateway labs](https://airlock.instruqt.com/pages/airlock-microgateway-labs)
 
 ## ⚖️ License
 View the [detailed license terms](https://www.airlock.com/en/airlock-license) for the software contained in this image.

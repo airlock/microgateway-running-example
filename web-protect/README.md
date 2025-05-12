@@ -4,7 +4,8 @@
   <img src="https://raw.githubusercontent.com/airlock/microgateway/main/media/Microgateway_Labeled_AlignRight.svg" alt="Microgateway Logo" width="250">
 </p>
 
-> This example demonstrates how to secure web applications in Kubernetes using Airlock Microgateway.
+This example demonstrates how to secure web applications in Kubernetes using Airlock Microgateway.
+
 ---
 
 ## 🖼 Architecture Overview
@@ -14,8 +15,8 @@
 **Key Components:**
 - **Ingress Controller (Traefik)** for routing
 - **Airlock Microgateway**:
-  - Sidecar mode for Nextcloud
-  - Gateway API (sidecarless) for Juice Shop
+  - Sidecar data plane mode for Nextcloud
+  - Sidecarless data plane mode (Gateway API) for Juice Shop
 - **Prometheus + Grafana** for metrics
 - **Loki + Promtail** for logging
 
@@ -49,8 +50,6 @@
 > * [helm](https://helm.sh/docs/intro/install/) is installed.
 > * [kustomize](https://kustomize.io) >= 5.2.1 is installed.
 > * An Ingress Controller (e.g. Traefik, Ingress Nginx, ...) is deployed.
->   
->   Please keep in mind, this is not a necessity for your deployments as Airlock Microgateway is fully compliant with Kubernetes Gateway API and can fulfill the Ingress function itself. It is just a lot easier to get the demo running.
 
 ## 🛠 Deployment Steps
 
@@ -182,7 +181,7 @@ kubectl -n juice-shop delete ingress juice-shop
 > [!NOTE]
 > You can now access the protected Juice Shop via http://juice-shop-127-0-0-1.nip.io:8080/
 
-## 🔁 Sidecar vs. Sidecarless
+## 🔁 Data plane mode 'Sidecar' vs. 'Sidecarless'
 
 | Feature | Sidecar | Sidecarless |
 |--------|---------|-------------|
@@ -205,7 +204,7 @@ kubectl -n juice-shop delete ingress juice-shop
   * [Troubleshooting](https://docs.airlock.com/microgateway/latest/#data/1659430054787.html)
   * [API Reference](https://docs.airlock.com/microgateway/latest/index/api/crds/index.html)
 * [Release Repository](https://github.com/airlock/microgateway)
-* [Airlock Microgateway labs](https://play.instruqt.com/airlock/invite/hyi9fy4b4jzc?icp_referrer=github.com)
+* [Airlock Microgateway labs](https://airlock.instruqt.com/pages/airlock-microgateway-labs)
 
 ## ⚖️ License
 View the [detailed license terms](https://www.airlock.com/en/airlock-license) for the software contained in this image.
