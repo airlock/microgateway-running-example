@@ -8,5 +8,5 @@ helmCharts:
     releaseName: grafana
     namespace: monitoring
     repo: https://grafana.github.io/helm-charts
-    version: 8.15.0
+    version: 9.2.0
     valuesFile: values.yaml
