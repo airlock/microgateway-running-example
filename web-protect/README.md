@@ -27,7 +27,7 @@ This example demonstrates how to secure web applications in Kubernetes using Air
 | Application | URL |
 |------------|-----|
 | Grafana | [http://grafana-127-0-0-1.nip.io/](http://grafana-127-0-0-1.nip.io/) |
-| Prometheus | [http://prometheus-127-0-0-1.nip.io/](http://nextcloud-127-0-0-1.nip.io/) |
+| Prometheus | [http://prometheus-127-0-0-1.nip.io/](http://prometheus-127-0-0-1.nip.io/) |
 | Nextcloud | [http://nextcloud-127-0-0-1.nip.io/](http://nextcloud-127-0-0-1.nip.io/) (Login: admin/changeme) |
 | Juice Shop, unprotected | [http://juice-shop-127-0-0-1.nip.io/](http://juice-shop-127-0-0-1.nip.io/) |
 | Juice Shop, protected | [[http://juice-shop-127-0-0-1.nip.io:8080/](http://juice-shop-127-0-0-1.nip.io:8080/) |
@@ -111,7 +111,7 @@ kubectl -n monitoring rollout status deployment,daemonset,statefulset
 
 ```bash
 # Deploy Airlock Microgateway including the CNI plugin
-kubectl kustomize --enable-helm manifests/airlock-microgateway | kubectl apply --server-side -f -
+kubectl kustomize --enable-helm manifests/airlock-microgateway | kubectl apply -f -
 
 # Wait until Airlock Microgateway is up and running
 kubectl -n kube-system rollout status daemonset airlock-microgateway-microgateway-cni
