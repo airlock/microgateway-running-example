@@ -296,7 +296,7 @@ Sidecarless Base URL: https://webserver-127-0-0-1.nip.io:8081/
 
 ## ⚠️ Important Notes
 - The limit of Groups in an OIDC token is limited to 200 by Microsoft.
-- In larger organisations this limit can easiely be exceeded.
+- In larger organisations this limit can easily be exceeded.
 - To avoid running into issues due to this limit, an Entra ID administrator should assign the registered OIDC application only the relevant group memberships (recommended for larger enterprises)
 
 ---
