@@ -77,8 +77,9 @@ prometheus:
   prometheusSpec:
     podMonitorSelectorNilUsesHelmValues: false
     serviceMonitorSelectorNilUsesHelmValues: false
+    maximumStartupDurationSeconds: 300
   ingress:
     enabled: true
     path: /
     hosts:
-      - prometheus-127-0-0-1.nip.io
+    - prometheus-127-0-0-1.nip.io
