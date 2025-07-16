@@ -5,11 +5,14 @@ metadata:
   name: juice-shop
   namespace: juice-shop
 spec:
+  hostnames:
+  - "juice-shop-127-0-0-1.nip.io"
   parentRefs:
   - group: gateway.networking.k8s.io
     kind: Gateway
-    name: gateway-juice-shop
+    name: airlock-gateway
     namespace: airlock-gateway
+    sectionName: http
   rules:
   - backendRefs:
     - group: ""

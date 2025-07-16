@@ -3,7 +3,7 @@ apiVersion: microgateway.airlock.com/v1alpha1
 kind: SessionHandling
 metadata:
   name: sessionagent
-  namespace: airlock-gateway-auth
+  namespace: airlock-gateway
 spec:
   persistence:
     redisProviderRef:

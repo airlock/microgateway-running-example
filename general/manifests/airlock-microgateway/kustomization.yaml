@@ -4,7 +4,12 @@ kind: Kustomization
 
 resources:
 - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/experimental-install.yaml
+- sessionstore
+- gateway-tls-cert.yaml
+- gateway.yaml
 - gatewayclass.yaml
+- gatewayparameters.yaml
+- namespace.yaml
 
 helmCharts:
 - name: microgateway-cni

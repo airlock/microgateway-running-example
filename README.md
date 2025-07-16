@@ -30,6 +30,7 @@ For a list of all features, view the [comparison of the community and premium ed
 
 This repository includes hands-on examples to help you deploy and use Airlock Microgateway in real-world scenarios:
 
+- [`general/`](./general): Prepare the environment with required licensing, and tooling used by all examples.
 - [`web-protect/`](./web-protect): Secure your web application against threats.
 - [`oidc/`](./oidc): Integrate upfront authentication and access control using OIDC.
 

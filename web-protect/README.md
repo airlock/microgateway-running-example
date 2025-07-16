@@ -26,8 +26,6 @@ This example demonstrates how to secure web applications in Kubernetes using Air
 
 | Application | URL |
 |------------|-----|
-| Grafana | [http://grafana-127-0-0-1.nip.io/](http://grafana-127-0-0-1.nip.io/) |
-| Prometheus | [http://prometheus-127-0-0-1.nip.io/](http://prometheus-127-0-0-1.nip.io/) |
 | Nextcloud | [http://nextcloud-127-0-0-1.nip.io/](http://nextcloud-127-0-0-1.nip.io/) (Login: admin/changeme) |
 | Juice Shop, unprotected | [http://juice-shop-127-0-0-1.nip.io/](http://juice-shop-127-0-0-1.nip.io/) |
 | Juice Shop, protected | [[http://juice-shop-127-0-0-1.nip.io:8080/](http://juice-shop-127-0-0-1.nip.io:8080/) |
@@ -36,87 +34,16 @@ This example demonstrates how to secure web applications in Kubernetes using Air
 
 ## ⚙️ Setup
 
-
 > [!WARNING]
 > Be aware that this is an example and some security settings are disabled to make this demo as simple as possible (e.g. authentication enforcement, restrictive deny rule configuration and other security settings).
 
-## General prerequisites
-* Install [Rancher Desktop](https://docs.rancherdesktop.io/getting-started/installation/).
+## 🧰 General Prerequisites
 
-> [!NOTE]
-> This example is built for Rancher Desktop with containerd as container engine. Nevertheless, it should also work with any other Kubernetes distributions. Simply ensure the following:
-> * Ensure the [Airlock Microgateway requirements](https://docs.airlock.com/microgateway/latest/#data/1660804711882.html) are met.
-> * [kubectl](https://kubernetes.io/docs/reference/kubectl/overview/) is installed.
-> * [helm](https://helm.sh/docs/intro/install/) is installed.
-> * [kustomize](https://kustomize.io) >= 5.2.1 is installed.
-> * An Ingress Controller (e.g. Traefik, Ingress Nginx, ...) is deployed.
+Before continuing, make sure your environment is prepared by following the instructions in the [General Setup](../general).  
+This includes installing required tools, deploying observability components, certificate authorities, Redis, and the Airlock Microgateway itself.
 
-## 🛠 Deployment Steps
 
-### Obtain and deploy the Airlock Microgateway license
-1. Either request a community license free of charge or purchase a premium license.
-   * Community license: [airlock.com/microgateway-community](https://airlock.com/en/microgateway-community)
-   * Premium license: [airlock.com/microgateway-premium](https://airlock.com/en/microgateway-premium)
-2. Check your mailbox and save the license file `microgateway-license.txt` locally (replace any existing file).
-3. Deploy the Airlock Microgateway license
-```bash
-# Create the airlock-microgateway-system namespace
-kubectl create ns airlock-microgateway-system --dry-run=client -o yaml | kubectl apply -f -
-
-# Deploy the Airlock Microgateway license
-kubectl -n airlock-microgateway-system create secret generic airlock-microgateway-license --from-file=microgateway-license.txt --dry-run=client -o yaml | kubectl apply -f -
-```
-
-> [!NOTE]
-> See [Community vs. Premium editions in detail](https://docs.airlock.com/microgateway/latest/#data/1675772882054.html) to choose the right license type.
-
-### Deploy the cert-manager
-For an easy start in non-production environments, you may deploy the same [cert-manager](https://cert-manager.io/) we are using internally for testing.
-```bash
-# Deploy the cert-manager
-kubectl kustomize --enable-helm manifests/cert-manager | kubectl apply --server-side -f -
-
-# Wait until the cert-manager is up and running
-kubectl -n cert-manager rollout status deployment
-```
-
-## Deploy the example
-
-### Deploy the logging, monitoring and reporting  stack
-```bash
-# Deploy Promtail, Loki, Prometheus and Grafana
-kubectl kustomize --enable-helm manifests/logging-and-reporting | kubectl apply --server-side -f -
-
-# Wait until Promtail, Loki, Prometheus and Grafana are up and running
-kubectl -n monitoring rollout status deployment,daemonset,statefulset
-```
-
-> [!NOTE]
-> You can now access
-> * Prometheus via http://prometheus-127-0-0-1.nip.io/
-> * Grafana via http://grafana-127-0-0-1.nip.io/
-
-### Deploy Airlock Microgateway
-> [!TIP]
-> Certain environments such as OpenShift or GKE require non-default configurations when installing the CNI plugin. In case that the CNI plugin does not start properly consult [Troubleshooting Microgateway CNI](https://docs.airlock.com/microgateway/latest/#data/1710781909882.html).
-
-> [!NOTE]
-> In case this example is not deployed in Rancher Desktop, most likely the `cniBinDir`and `cniNetDir`in the file `manifests/airlock-microgateway/microgateway-cni-values.yaml` must be adjusted.
-> Example:
-> ```
-> config:
->   cniBinDir: "/usr/libexec/cni/"
->   cniNetDir: "/etc/cni/net.d"
-> ```
-
-```bash
-# Deploy Airlock Microgateway including the CNI plugin
-kubectl kustomize --enable-helm manifests/airlock-microgateway | kubectl apply -f -
-
-# Wait until Airlock Microgateway is up and running
-kubectl -n kube-system rollout status daemonset airlock-microgateway-microgateway-cni
-kubectl -n airlock-microgateway-system rollout status deployment
-```
+## 🛠 Deploy the examples:
 
 ### Deploy Nextcloud
 

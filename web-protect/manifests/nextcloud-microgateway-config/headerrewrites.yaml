@@ -13,11 +13,11 @@ spec:
         builtIn:
           standardHeaders: true
         custom:
-          - name: Allow CSRF-Token header
-            headers:
-              - name:
-                  matcher:
-                    exact: requesttoken
+        - name: Allow mandetory nextcloud header
+          headers:
+          - name:
+              matcher:
+                exact: requesttoken
     remove:
       builtIn:
         alternativeForwardedHeaders: true

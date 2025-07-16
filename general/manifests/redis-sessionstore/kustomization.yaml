@@ -5,7 +5,7 @@ namespace: redis
 
 resources:
 - namespace.yaml
-- redis-cert
+- redis-certificate.yaml
 
 helmCharts:
 - name: redis

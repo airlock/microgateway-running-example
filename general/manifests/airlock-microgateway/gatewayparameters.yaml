@@ -1,15 +1,16 @@
+---
 apiVersion: microgateway.airlock.com/v1alpha1
 kind: GatewayParameters
 metadata:
-  name: gatewayparameters-auth
-  namespace: airlock-gateway-auth
+  name: gatewayparameters
+  namespace: airlock-gateway
 spec:
   logging:
     level: info
   kubernetes:
     service:
       type: LoadBalancer
-      externalTrafficPolicy: Cluster
+      externalTrafficPolicy: Local
     deployment:
       replicas: 1
       placement: {}

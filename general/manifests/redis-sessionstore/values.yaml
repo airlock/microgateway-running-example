@@ -26,7 +26,7 @@ networkPolicy:
 
 auth:
   enabled: true
-  password: poc
+  password: runningexample
 
 tls:
   enabled: true
@@ -34,4 +34,3 @@ tls:
   certFilename: tls.crt
   certKeyFilename: tls.key
   certCAFilename: ca.crt
-  

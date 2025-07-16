@@ -2,4 +2,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: airlock-gateway-auth
+  name: oidc
+---
+
+

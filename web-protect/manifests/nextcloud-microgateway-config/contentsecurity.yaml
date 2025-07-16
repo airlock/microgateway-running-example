@@ -5,9 +5,6 @@ metadata:
   name: content-security-nextcloud
   namespace: nextcloud
 spec:
-  #  parserRef:
-  #    name: parser-example
-
   limitsRef:
     name: limits-nextcloud
 
@@ -17,9 +14,3 @@ spec:
   filter:
     denyRulesRef:
       name: deny-rule-nextcloud # Name of the deny rule (DenyRule)
-
-#  apiProtection:
-#    openAPIRef:
-#      name: open-api-example
-#    graphQLRef:
-#      name: graphql-example
