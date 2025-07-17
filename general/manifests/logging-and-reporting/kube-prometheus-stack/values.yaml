@@ -1,57 +1,29 @@
 ---
 defaultRules:
-  create: true
-  rules:
-    alertmanager: true
-    etcd: false
-    configReloaders: true
-    general: true
-    k8s: true
-    kubeApiserverAvailability: true
-    kubeApiserverBurnrate: true
-    kubeApiserverHistogram: true
-    kubeApiserverSlos: true
-    kubeControllerManager: false
-    kubelet: true
-    kubeProxy: false
-    kubePrometheusGeneral: true
-    kubePrometheusNodeRecording: true
-    kubernetesApps: true
-    kubernetesResources: true
-    kubernetesStorage: true
-    kubernetesSystem: true
-    kubeSchedulerAlerting: false
-    kubeSchedulerRecording: false
-    kubeStateMetrics: true
-    network: true
-    node: true
-    nodeExporterAlerting: true
-    nodeExporterRecording: true
-    prometheus: true
-    prometheusOperator: true
+  create: false
 
 alertmanager:
-  enabled: true
+  enabled: false
 
 grafana:
   enabled: false
 
 kubernetesServiceMonitors:
-  enabled: true
-
-kubeApiServer:
-  enabled: true
-
-kubelet:
-  enabled: true
-
-kubeControllerManager:
-  enabled: false
+  enabled: true # needed to show all the Data of the Gateway, Sidecar and Engine itself in the Grafana Airlock dashboard
 
 coreDns:
-  enabled: true
+  enabled: false
 
 kubeDns:
+  enabled: false
+
+kubeApiServer:
+  enabled: false
+
+kubelet:
+  enabled: true # needed to show the container ressourcess in Grafana Airlock Metrics dashboard
+
+kubeControllerManager:
   enabled: false
 
 kubeEtcd:
@@ -64,10 +36,10 @@ kubeProxy:
   enabled: false
 
 kubeStateMetrics:
-  enabled: true
+  enabled: true # needed to show the container readyness in Grafana Airlock Metrics dashboard
 
 nodeExporter:
-  enabled: true
+  enabled: false
 
 prometheusOperator:
   enabled: true
@@ -78,6 +50,10 @@ prometheus:
     podMonitorSelectorNilUsesHelmValues: false
     serviceMonitorSelectorNilUsesHelmValues: false
     maximumStartupDurationSeconds: 300
+    resources:
+      requests:
+        memory: 400Mi
+        cpu: 200m
   ingress:
     enabled: true
     path: /
