@@ -4,9 +4,9 @@ kind: Kustomization
 namespace: monitoring
 
 helmCharts:
-  - name: grafana
-    releaseName: grafana
-    namespace: monitoring
-    repo: https://grafana.github.io/helm-charts
-    version: 9.2.10
-    valuesFile: values.yaml
+- name: grafana
+  releaseName: grafana
+  namespace: monitoring
+  repo: https://grafana.github.io/helm-charts
+  version: 9.2.10
+  valuesFile: values.yaml
