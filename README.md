@@ -34,6 +34,13 @@ This repository includes hands-on examples to help you deploy and use Airlock Mi
 - [`web-protect/`](./web-protect): Secure your web application against threats.
 - [`oidc/`](./oidc): Integrate upfront authentication and access control using OIDC.
 
+## 🏁 Quick Start
+
+1. Start with the [General Setup](./general) to install the Microgateway and supporting components.
+2. Continue with the example of your choice:
+   - [Web Protection](./web-protect)
+   - [OIDC Authentication](./oidc)
+   
 ---
 
 ## ⚖️ License

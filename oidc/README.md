@@ -159,8 +159,20 @@ kubectl kustomize --enable-helm manifests/webserver-microgateway-config | kubect
 
 Integrating Entra data into your deployment is a crucial step to ensure your application is properly configured for authentication and authorization.
 
-⚠️ **Important Note:**  
+⚠️ **Important Note:**
 The provided `kubectl` commands are optimized for **Linux** environments. If you are using **macOS** or **Windows**, you may need to adjust the commands accordingly.
+
+For convenience, a helper script is provided at [`scripts/patch-oidc-config.sh`](scripts/patch-oidc-config.sh). Set the required environment variables and run the script to apply all patches at once:
+
+```bash
+TENANT_ID=<tenant> \
+USER_GROUP_ID=<user group> \
+ADMIN_GROUP_ID=<admin group> \
+CLIENT_ID=<client id> \
+CLIENT_SECRET=<secret> \
+../scripts/patch-oidc-config.sh
+```
+
 
 ```bash
 # Patch of the user group
