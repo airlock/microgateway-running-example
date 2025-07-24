@@ -170,8 +170,12 @@ USER_GROUP_ID=<user group> \
 ADMIN_GROUP_ID=<admin group> \
 CLIENT_ID=<client id> \
 CLIENT_SECRET=<secret> \
-../scripts/patch-oidc-config.sh
+./scripts/patch-oidc-config.sh
 ```
+
+---
+<details>
+<summary>Patch manually:</summary>
 
 
 ```bash
@@ -282,7 +286,7 @@ kubectl patch OIDCRelyingParty webserver-user \
     }
   ]'
 ```
-
+</details>
 
 ## Authentication with browser
 Sidecarless Base URL: https://webserver-127-0-0-1.nip.io:8081/
