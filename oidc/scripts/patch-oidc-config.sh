@@ -19,7 +19,11 @@ kubectl patch JWKS webserver -n "$NAMESPACE" --type='json' -p="[
 ]"
 
 kubectl patch secret oidc-client-password -n "$NAMESPACE" --type='json' -p="[
-  {\"op\": \"replace\", \"path\": \"/stringData/client.secret\", \"value\": \"$CLIENT_SECRET\"}
+  {
+    \"op\": \"replace\",
+    \"path\": \"/data/client.secret\",
+    \"value\": \"$(echo -n "$CLIENT_SECRET" | base64 | tr -d '\n')\"
+  }
 ]"
 
 kubectl patch OIDCProvider webserver -n "$NAMESPACE" --type='json' -p="[
