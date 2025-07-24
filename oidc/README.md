@@ -173,7 +173,6 @@ CLIENT_SECRET=<secret> \
 ./scripts/patch-oidc-config.sh
 ```
 
----
 <details>
 <summary>Patch manually:</summary>
 
