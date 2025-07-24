@@ -33,25 +33,14 @@ Extend your secure deployment by integrating **authentication and authorization*
 ---
 
 ## ⚙️ Setup
-* Install [Rancher Desktop](https://docs.rancherdesktop.io/getting-started/installation/).
 
-> [!NOTE]
-> This example is built for Rancher Desktop with containerd as container engine. Nevertheless, it should also work with any other Kubernetes distributions. Simply ensure the following:
-> * Ensure the [Airlock Microgateway requirements](https://docs.airlock.com/microgateway/latest/#data/1660804711882.html) are met.
-> * [kubectl](https://kubernetes.io/docs/reference/kubectl/overview/) is installed.
-> * [helm](https://helm.sh/docs/intro/install/) is installed.
-> * [kustomize](https://kustomize.io) >= 5.2.1 is installed.
-> * An Ingress Controller (e.g. Traefik, Ingress Nginx, ...) is deployed.
+> [!WARNING]
+> Be aware that this is an example and some security settings are disabled to make this demo as simple as possible (e.g. authentication enforcement, restrictive deny rule configuration and other security settings).
 
-## Airlock OIDC Microgateway prerequisites
+## 🧰 General Prerequisites
 
-This example is implemented on top of the base demo, [web protection](../web-protect). Please ensure you have it already set up correctly.
-
-**If any of the prerequisites is missing, please install it according to the [web protection](../web-protect) example**
-
-> * Microgateway with valid license and experimental Gateway API CRDs is deployed 
-> * cert-manager is deployed
-> * logging, monitoring and reporting stack is deployed
+Before continuing, make sure your environment is prepared by following the instructions in the [General Setup](../general).  
+This includes installing required tools, deploying observability components, certificate authorities, Redis, and the Airlock Microgateway itself.
 
 ## Entra ID Prerequisites
 
@@ -140,20 +129,18 @@ To assist you, here are the key steps in image form. Click the thumbnails for a 
 > [!WARNING]
 > Be aware that this is an example and some security settings are disabled to make this demo as simple as possible (e.g. authentication enforcement, restrictive deny rule configuration and other security settings).
 
-## Deploy CA
-```bash
-kubectl kustomize --enable-helm manifests/ca | kubectl apply --server-side -f -
-```
-
-## Deploy Redis
-```bash
-kubectl kustomize --enable-helm manifests/redis-sessionstore | kubectl apply --server-side -f -
-```
-
 ## Deploy Webserver
 ```bash
-kubectl kustomize --enable-helm manifests | kubectl apply --server-side -f -
+kubectl kustomize --enable-helm manifests/webserver | kubectl apply --server-side -f -
+
+# Wait until Webserver is up and running
 kubectl -n oidc rollout status deployment webserver
+```
+
+## Protect Webserver (data plane mode 'sidecarless')
+```bash
+# Deploy the Airlock Microgateway configuration
+kubectl kustomize --enable-helm manifests/webserver-microgateway-config | kubectl apply --server-side -f -
 ```
 
  > [!WARNING] 
@@ -172,8 +159,23 @@ kubectl -n oidc rollout status deployment webserver
 
 Integrating Entra data into your deployment is a crucial step to ensure your application is properly configured for authentication and authorization.
 
-⚠️ **Important Note:**  
+⚠️ **Important Note:**
 The provided `kubectl` commands are optimized for **Linux** environments. If you are using **macOS** or **Windows**, you may need to adjust the commands accordingly.
+
+For convenience, a helper script is provided at [`scripts/patch-oidc-config.sh`](scripts/patch-oidc-config.sh). Set the required environment variables and run the script to apply all patches at once:
+
+```bash
+TENANT_ID=<tenant> \
+USER_GROUP_ID=<user group> \
+ADMIN_GROUP_ID=<admin group> \
+CLIENT_ID=<client id> \
+CLIENT_SECRET=<secret> \
+./scripts/patch-oidc-config.sh
+```
+
+<details>
+<summary>Patch manually:</summary>
+
 
 ```bash
 # Patch of the user group
@@ -283,7 +285,7 @@ kubectl patch OIDCRelyingParty webserver-user \
     }
   ]'
 ```
-
+</details>
 
 ## Authentication with browser
 Sidecarless Base URL: https://webserver-127-0-0-1.nip.io:8081/

@@ -1,0 +1,61 @@
+---
+defaultRules:
+  create: false
+
+alertmanager:
+  enabled: false
+
+grafana:
+  enabled: false
+
+kubernetesServiceMonitors:
+  enabled: true # needed to show all the Data of the Gateway, Sidecar and Engine itself in the Grafana Airlock dashboard
+
+coreDns:
+  enabled: false
+
+kubeDns:
+  enabled: false
+
+kubeApiServer:
+  enabled: false
+
+kubelet:
+  enabled: true # needed to show the container ressourcess in Grafana Airlock Metrics dashboard
+
+kubeControllerManager:
+  enabled: false
+
+kubeEtcd:
+  enabled: false
+
+kubeScheduler:
+  enabled: false
+
+kubeProxy:
+  enabled: false
+
+kubeStateMetrics:
+  enabled: true # needed to show the container readyness in Grafana Airlock Metrics dashboard
+
+nodeExporter:
+  enabled: false
+
+prometheusOperator:
+  enabled: true
+
+prometheus:
+  enabled: true
+  prometheusSpec:
+    podMonitorSelectorNilUsesHelmValues: false
+    serviceMonitorSelectorNilUsesHelmValues: false
+    maximumStartupDurationSeconds: 300
+    resources:
+      requests:
+        memory: 400Mi
+        cpu: 200m
+  ingress:
+    enabled: true
+    path: /
+    hosts:
+    - prometheus-127-0-0-1.nip.io

@@ -5,11 +5,14 @@ metadata:
   name: webserver
   namespace: oidc
 spec:
+  hostnames:
+  - "webserver-127-0-0-1.nip.io"
   parentRefs:
   - group: gateway.networking.k8s.io
     kind: Gateway
-    name: gateway-webserver
-    namespace: airlock-gateway-auth
+    name: airlock-gateway
+    namespace: airlock-gateway
+    sectionName: https
   rules:
   - backendRefs:
     - group: ""

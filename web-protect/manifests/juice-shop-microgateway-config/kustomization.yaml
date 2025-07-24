@@ -1,12 +1,10 @@
 ---
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: juice-shop
 
 resources:
 - contentsecuritypolicy.yaml
 - denyrule.yaml
-- gateway.yaml
-- gatewayparameters.yaml
 - headerrewrites.yaml
 - httproute.yaml
-- namespace.yaml
