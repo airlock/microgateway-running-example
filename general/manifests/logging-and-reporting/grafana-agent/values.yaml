@@ -1,0 +1,114 @@
+agent:
+  mode: flow
+
+  configMap:
+    create: true
+    content: |
+      discovery.kubernetes "pods" {
+        role = "pod"
+      }
+
+      discovery.relabel "airlock_pods" {
+        targets = discovery.kubernetes.pods.targets
+
+        rule {
+          source_labels = ["__meta_kubernetes_pod_label_microgateway_airlock_com_managedBy"]
+          regex         = "airlock-microgateway-system"
+          action        = "keep"
+        }
+
+        rule {
+          source_labels = ["__meta_kubernetes_pod_container_name"]
+          regex         = "airlock-microgateway-engine|airlock-microgateway-session-agent"
+          action        = "keep"
+        }
+
+        rule {
+          source_labels = ["__meta_kubernetes_namespace"]
+          target_label  = "namespace"
+          action        = "replace"
+        }
+
+        rule {
+          source_labels = ["__meta_kubernetes_pod_name"]
+          target_label  = "pod"
+          action        = "replace"
+        }
+
+        rule {
+          source_labels = ["__meta_kubernetes_pod_container_name"]
+          target_label  = "container"
+          action        = "replace"
+        }
+
+        rule {
+          target_label  = "service"
+          replacement   = "airlock-microgateway"
+          action        = "replace"
+        }
+
+        rule {
+          source_labels = ["__meta_kubernetes_pod_uid", "__meta_kubernetes_pod_container_name"]
+          target_label  = "__path__"
+          separator     = "/"
+          replacement   = "/var/log/pods/*$1/*.log"
+          action        = "replace"
+        }
+      }
+
+      loki.source.kubernetes "airlock_logs" {
+        targets    = discovery.relabel.airlock_pods.output
+        forward_to = [loki.process.airlock.receiver]
+      }
+
+      loki.process "airlock" {
+        stage.static_labels {
+          values = {
+            cluster = "my-cluster",
+            service = "airlock-microgateway",
+          }
+        }
+        forward_to = [loki.write.default.receiver]
+      }
+
+      loki.write "default" {
+        endpoint {
+          url = "http://loki.monitoring.svc.cluster.local:3100/loki/api/v1/push"
+        }
+      }
+
+  clustering:
+    enabled: false
+
+  storagePath: /tmp/agent
+  listenAddr: 0.0.0.0
+  listenPort: 80
+  listenScheme: HTTP
+  uiPathPrefix: /
+
+  mounts:
+    varlog: true
+    dockercontainers: false
+    extra: []
+
+  extraPorts: []
+  extraArgs: []
+  extraEnv: []
+  envFrom: []
+  enableReporting: true
+  securityContext: {}
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+rbac:
+  create: true
+  clusterWide: true
+
+serviceAccount:
+  create: true
+  name: alloy-agent

@@ -13,7 +13,7 @@ spec:
         builtIn:
           standardHeaders: true
         custom:
-        - name: Allow mandetory nextcloud header
+        - name: Allow mandatory nextcloud header
           headers:
           - name:
               matcher:
