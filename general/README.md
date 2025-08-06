@@ -14,7 +14,7 @@ This guide provides the foundational setup required for running Airlock Microgat
 - **Ingress Controller (e.g. Traefik)** – Routing and traffic management
 - **Airlock Microgateway** – Data plane security
 - **Prometheus & Grafana** – Metrics and dashboards
-- **Loki & Promtail** – Log aggregation and analysis
+- **Loki & Grafana-Agent** – Log aggregation and analysis
 
 ---
 
