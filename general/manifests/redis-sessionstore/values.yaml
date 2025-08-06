@@ -17,10 +17,6 @@ master:
   livenessProbe:
     initialDelaySeconds: 0
 
-  service:
-    ports:
-      redis: 7777
-
 networkPolicy:
   enabled: false
 
