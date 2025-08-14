@@ -14,7 +14,7 @@ This guide provides the foundational setup required for running Airlock Microgat
 - **Ingress Controller (e.g. Traefik)** – Routing and traffic management
 - **Airlock Microgateway** – Data plane security
 - **Prometheus & Grafana** – Metrics and dashboards
-- **Loki & Grafana-Agent** – Log aggregation and analysis
+- **Loki & Alloy** – Log aggregation and analysis
 
 ---
 
@@ -51,7 +51,7 @@ kubectl -n airlock-microgateway-system create secret generic airlock-microgatewa
 ## 📜 Deploy Cert-Manager
 For an easy start in non-production environments, you may deploy the same [cert-manager](https://cert-manager.io/) we are using internally for testing.
 ```bash
-kubectl kustomize --enable-helm manifests/cert-manager | kubectl apply --server-side -f -
+kubectl kustomize --enable-helm general/manifests/cert-manager | kubectl apply --server-side -f -
 
 # Wait until the cert-manager is up and running
 kubectl -n cert-manager rollout status deployment
@@ -59,12 +59,12 @@ kubectl -n cert-manager rollout status deployment
 
 ## 📜 Deploy Certificate Authority (CA)
 ```bash
-kubectl kustomize --enable-helm manifests/ca | kubectl apply --server-side -f -
+kubectl kustomize --enable-helm general/manifests/ca | kubectl apply --server-side -f -
 ```
 
 ## 🗄️ Deploy Redis (Session Store)
 ```bash
-kubectl kustomize --enable-helm manifests/redis-sessionstore | kubectl apply --server-side -f -
+kubectl kustomize --enable-helm general/manifests/redis-sessionstore | kubectl apply --server-side -f -
 
 # Wait until the Redis is up and running
 kubectl -n redis rollout status deployment
@@ -72,9 +72,9 @@ kubectl -n redis rollout status deployment
 
 ## 📊 Deploy Logging and Monitoring Stack
 ```bash
-kubectl kustomize --enable-helm manifests/logging-and-reporting | kubectl apply --server-side -f -
+kubectl kustomize --enable-helm general/manifests/logging-and-reporting | kubectl apply --server-side -f -
 
-# Wait until Promtail, Loki, Prometheus and Grafana are up and running
+# Wait until Alloy, Loki, Prometheus and Grafana are up and running
 kubectl -n monitoring rollout status deployment,daemonset,statefulset
 ```
 
@@ -83,12 +83,22 @@ kubectl -n monitoring rollout status deployment,daemonset,statefulset
 > * Prometheus via http://prometheus-127-0-0-1.nip.io/
 > * Grafana via http://grafana-127-0-0-1.nip.io/
 
+## 🧩 Deploy GatewayAPI CRDs
+In order to be able to use GatewayAPI you have to deploy the CRDs in advance.
+```bash
+# Please install experimental for backendTLS support e.g. OIDC example
+kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/experimental-install.yaml 
+
+# Standard version with no experimental features. OIDC example will not work with it or needs to be manually adjusted.
+kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/standard-install.yaml
+```
+
 ## 🚀 Deploy Airlock Microgateway
 > [!TIP]
 > Certain environments such as OpenShift or GKE require non-default configurations when installing the CNI plugin. In case that the CNI plugin does not start properly consult [Troubleshooting Microgateway CNI](https://docs.airlock.com/microgateway/latest/#data/1710781909882.html).
 
 > [!NOTE]
-> In case this example is not deployed in Rancher Desktop, most likely the `cniBinDir`and `cniNetDir`in the file `manifests/airlock-microgateway/microgateway-cni-values.yaml` must be adjusted.
+> In case this example is not deployed in Rancher Desktop, most likely the `cniBinDir`and `cniNetDir`in the file `general/manifests/airlock-microgateway/microgateway-cni-values.yaml` must be adjusted.
 > Example:
 > ```
 > config:
@@ -98,7 +108,7 @@ kubectl -n monitoring rollout status deployment,daemonset,statefulset
 
 ```bash
 # Deploy Airlock Microgateway including the CNI plugin
-kubectl kustomize --enable-helm manifests/airlock-microgateway | kubectl apply -f -
+kubectl kustomize --enable-helm general/manifests/airlock-microgateway | kubectl apply -f -
 
 # Wait until Airlock Microgateway is up and running
 kubectl -n kube-system rollout status daemonset airlock-microgateway-microgateway-cni

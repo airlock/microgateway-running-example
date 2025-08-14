@@ -15,7 +15,7 @@ Extend your secure deployment by integrating **authentication and authorization*
 **Flow Summary:**
 - Requests routed through **Traefik Ingress**
 - Services protected with **Airlock Microgateway** in **sidecarless data plane mode**
-- Observability stack (Prometheus, Grafana, Loki, Promtail)
+- Observability stack (Prometheus, Grafana, Alloy and Loki)
 - Authentication via **Microsoft Entra ID (formerly known as Azure AD)**
 
 ---
@@ -131,7 +131,7 @@ To assist you, here are the key steps in image form. Click the thumbnails for a 
 
 ## Deploy Webserver
 ```bash
-kubectl kustomize --enable-helm manifests/webserver | kubectl apply --server-side -f -
+kubectl kustomize --enable-helm oidc/manifests/webserver | kubectl apply --server-side -f -
 
 # Wait until Webserver is up and running
 kubectl -n oidc rollout status deployment webserver
@@ -140,7 +140,7 @@ kubectl -n oidc rollout status deployment webserver
 ## Protect Webserver (data plane mode 'sidecarless')
 ```bash
 # Deploy the Airlock Microgateway configuration
-kubectl kustomize --enable-helm manifests/webserver-microgateway-config | kubectl apply --server-side -f -
+kubectl kustomize --enable-helm oidc/manifests/webserver-microgateway-config | kubectl apply --server-side -f -
 ```
 
  > [!WARNING] 
@@ -152,7 +152,7 @@ kubectl kustomize --enable-helm manifests/webserver-microgateway-config | kubect
  ```bash
  kubectl delete pod -n airlock-microgateway-system $(kubectl get pods -n airlock-microgateway-system -o name | grep airlock-microgateway-operator-)
  
- kubectl delete -n oidc backendtlspolicies.gateway.networking.k8s.io webserver-tls && kubectl apply -f manifests/webserver-microgateway-config/backendtlspolicy.yaml
+ kubectl delete -n oidc backendtlspolicies.gateway.networking.k8s.io webserver-tls && kubectl apply -f oidc/manifests/webserver-microgateway-config/backendtlspolicy.yaml
  ```
 
 ## Adding Entra Data to Your Deployment
