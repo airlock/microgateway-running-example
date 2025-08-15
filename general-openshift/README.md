@@ -84,12 +84,13 @@ oc kustomize --enable-helm general-openshift/manifests/logging-and-reporting/gra
 > * Grafana via http://grafana-127-0-0-1.nip.io/
 
 ### Install Loki communiti edition via Operator Hub (from opdev)
-Open Loki via installed Operator and apply the following config.
 
 Apply RBAC to grant Loki access:
 ```bash
 kubectl kustomize --enable-helm general-openshift/manifests/logging-and-reporting/loki-community | kubectl apply --server-side -f -
 ```
+
+Open Loki via installed Operator and apply the following config.
 
 <details>
 <summary>Loki Community config</summary>

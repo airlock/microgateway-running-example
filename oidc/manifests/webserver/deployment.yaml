@@ -31,6 +31,8 @@ spec:
         - name: apache-tls-cert
           mountPath: /etc/apache2/certs/
           readOnly: true
+        - name: apache-logs
+          mountPath: /usr/local/apache2/logs
       volumes:
       - name: config
         configMap:
@@ -41,3 +43,5 @@ spec:
       - name: apache-tls-cert
         secret:
           secretName: apache-tls-cert
+      - name: apache-logs
+        emptyDir: {}

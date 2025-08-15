@@ -39,7 +39,7 @@ This example demonstrates how to secure web applications in Kubernetes using Air
 
 ## 🧰 General Prerequisites
 
-Before continuing, make sure your environment is prepared by following the instructions in the [General Setup](../general).  
+Before continuing, make sure your environment is prepared by following the instructions in the [General Setup](../general) or [General-OpenShift Setup](../general-openshift).  
 This includes installing required tools, deploying observability components, certificate authorities, Redis, and the Airlock Microgateway itself.
 
 
@@ -82,6 +82,8 @@ kubectl -n juice-shop rollout status deployment
 ## Protect the web application
 
 ### Protect Nextcloud (data plane mode 'sidecar')
+> ⚠️ Warning
+> Sidecar mode needs to be installed manually in OpenShift and is not part of the Example.
 
 ```bash
 # Deploy the Airlock Microgateway configuration
