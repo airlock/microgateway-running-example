@@ -4,7 +4,7 @@ kind: Kustomization
 
 resources:
 - namespace.yaml
+- alloy
 - loki
 - kube-prometheus-stack
 - grafana
-- grafana-agent

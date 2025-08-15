@@ -6,30 +6,22 @@ alloy:
   configMap:
     create: true
     content: |
-      // Discover all pods
+      // Discover all pods cluster-wide
       discovery.kubernetes "pod" {
         role = "pod"
       }
 
-      // Filter down to Airlock Microgateway logs only
-      discovery.relabel "airlock_pod_logs" {
+      discovery.relabel "airlock_sidecars" {
         targets = discovery.kubernetes.pod.targets
 
-        // Keep only the airlock-gateway namespace
-        rule {
-          source_labels = ["__meta_kubernetes_namespace"]
-          regex         = "airlock-gateway"
-          action        = "keep"
-        }
-
-        // Keep only the two containers we care about
+        // Keep only Airlock sidecar containers
         rule {
           source_labels = ["__meta_kubernetes_pod_container_name"]
           regex         = "airlock-microgateway-engine|airlock-microgateway-session-agent"
           action        = "keep"
         }
 
-        // Friendly labels for querying
+        // Useful labels
         rule {
           source_labels = ["__meta_kubernetes_namespace"]
           target_label  = "namespace"
@@ -45,33 +37,45 @@ alloy:
           target_label  = "container"
           action        = "replace"
         }
-
-        // Static service label to simplify LogQL
         rule {
-          target_label  = "service"
-          replacement   = "airlock-microgateway"
+          source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_name"]
+          target_label  = "app"
           action        = "replace"
+        }
+        // Optional: capture engine version label
+        rule {
+          source_labels = ["__meta_kubernetes_pod_label_sidecar_microgateway_airlock_com_engineVersion"]
+          target_label  = "engine_version"
+          action        = "replace"
+        }
+
+        // Static service label to simplify queries
+        rule {
+          target_label = "service"
+          replacement  = "airlock-microgateway"
+          action       = "replace"
         }
       }
 
       // Tail via Kubernetes API (no hostPath mounts)
-      loki.source.kubernetes "pods" {
-        targets    = discovery.relabel.airlock_pod_logs.output
+      loki.source.kubernetes "sidecars" {
+        targets    = discovery.relabel.airlock_sidecars.output
         forward_to = [loki.process.airlock.receiver]
       }
 
-      // Add cluster/service labels and forward to Loki
+      // Optional pipelines (add filters/parsers here)
       loki.process "airlock" {
+        // Example: drop noisy lines
+        // stage.drop {
+        //   expression = "unknown-service"
+        // }
         stage.static_labels {
-          values = {
-            cluster = "my-cluster",
-            service = "airlock-microgateway",
-          }
+          values = { cluster = "my-cluster" }
         }
         forward_to = [loki.write.default.receiver]
       }
 
-      // Push to Loki (tenant set explicitly; change if needed)
+      // Push to Loki
       loki.write "default" {
         endpoint {
           url       = "http://loki.monitoring.svc.cluster.local:3100/loki/api/v1/push"
