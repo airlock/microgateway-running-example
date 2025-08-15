@@ -1,10 +1,32 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
-  ],
+  "extends": ["config:recommended"],
+
   "schedule": [
     "after 10am on sunday",
     "before 5pm on sunday"
   ]
+
+  "enabledManagers": ["kustomize", "helmv3", "helm-values", "kubernetes"],
+
+  // Kustomize: also match "Kustomization" and keep .yml/.yaml
+  "kustomize": {
+    "managerFilePatterns": ["/(^|/)[Kk]ustomization(\\.ya?ml)?$/"]
+  },
+
+  // Helm values: include values-prod.yaml / values-dev.yaml, etc.
+  "helm-values": {
+    "managerFilePatterns": ["/(^|/)values(\\.[^/]+)?\\.ya?ml$/"]
+  },
+
+  // Plain Kubernetes manifests (only scanned if you tell Renovate where they are)
+  "kubernetes": {
+    "managerFilePatterns": [
+      "/(^|/)(k8s|manifests|deployments)/.+\\.ya?ml$"
+    ]
+  }
+
+  // If your manifests live in folders like examples/ or test/,
+  // config:recommended may ignore them. In that case either remove the preset
+  // or add a project-level `ignorePaths` that *doesn't* exclude those dirs.
 }
