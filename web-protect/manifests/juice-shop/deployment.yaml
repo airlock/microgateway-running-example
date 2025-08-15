@@ -28,7 +28,7 @@ spec:
           mountPath: /mnt/csaf
       containers:
       - name: juice-shop
-        image: bkimminich/juice-shop:v17.1.1
+        image: bkimminich/juice-shop:v18.0.0
         ports:
         - containerPort: 3000
         volumeMounts:
