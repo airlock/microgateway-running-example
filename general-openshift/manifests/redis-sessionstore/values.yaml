@@ -1,5 +1,11 @@
 architecture: standalone
 
+image:
+  registry: docker.io
+  repository: bitnami/redis
+  tag: latest # changed to latest due to the bitnami change
+  digest: ""
+
 master:
   kind: Deployment
 
