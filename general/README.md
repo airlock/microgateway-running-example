@@ -87,10 +87,10 @@ kubectl -n monitoring rollout status deployment,daemonset,statefulset
 In order to be able to use GatewayAPI you have to deploy the CRDs in advance.
 ```bash
 # Please install experimental for backendTLS support e.g. OIDC example
-kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/experimental-install.yaml --server-side
+kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/experimental-install.yaml
 
 # Standard version with no experimental features. OIDC example will not work with it or needs to be manually adjusted.
-kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/standard-install.yaml --server-side
+kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/standard-install.yaml
 ```
 
 ## 🚀 Deploy Airlock Microgateway

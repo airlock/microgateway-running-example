@@ -20,7 +20,7 @@ spec:
   pathMapping:
     logoutPath:
       matcher:
-        exact: /admin/logout
+        exact: /logout
     redirectPath:
       matcher:
         exact: /admin/callback
@@ -49,7 +49,7 @@ spec:
   pathMapping:
     logoutPath:
       matcher:
-        exact: /user/logout
+        exact: /logout
     redirectPath:
       matcher:
         exact: /user/callback

@@ -12,7 +12,7 @@ helmCharts:
   releaseName: redis
   namespace: redis
   repo: oci://registry-1.docker.io/bitnamicharts
-  version: 22.0.5
+  version: 22.0.6
   valuesFile: values.yaml
 ---
 
