@@ -18,7 +18,7 @@ This example demonstrates how to secure web applications in Kubernetes using Air
   - Sidecar data plane mode for Nextcloud
   - Sidecarless data plane mode (Gateway API) for Juice Shop
 - **Prometheus + Grafana** for metrics
-- **Loki + Promtail** for logging
+- **Loki + Alloy** for logging
 
 ---
 
@@ -39,7 +39,7 @@ This example demonstrates how to secure web applications in Kubernetes using Air
 
 ## 🧰 General Prerequisites
 
-Before continuing, make sure your environment is prepared by following the instructions in the [General Setup](../general).  
+Before continuing, make sure your environment is prepared by following the instructions in the [General Setup](../general) or [General-OpenShift Setup](../general-openshift).  
 This includes installing required tools, deploying observability components, certificate authorities, Redis, and the Airlock Microgateway itself.
 
 
@@ -49,7 +49,7 @@ This includes installing required tools, deploying observability components, cer
 
 ```bash
 # Deploy Nextcloud
-kubectl kustomize --enable-helm manifests/nextcloud | kubectl apply --server-side -f -
+kubectl kustomize --enable-helm web-protect/manifests/nextcloud | kubectl apply --server-side -f -
 
 # Wait until Nextcloud is up and running
 kubectl -n nextcloud rollout status deployment,statefulset
@@ -67,7 +67,7 @@ kubectl -n nextcloud rollout status deployment,statefulset
 
 ```bash
 # Deploy Juice Shop
-kubectl kustomize --enable-helm manifests/juice-shop | kubectl apply --server-side -f -
+kubectl kustomize --enable-helm web-protect/manifests/juice-shop | kubectl apply --server-side -f -
 
 # Wait until Juice Shop is up and running
 kubectl -n juice-shop rollout status deployment
@@ -82,10 +82,12 @@ kubectl -n juice-shop rollout status deployment
 ## Protect the web application
 
 ### Protect Nextcloud (data plane mode 'sidecar')
+> ⚠️ Warning
+> Sidecar mode needs to be installed manually in OpenShift and is not part of the Example.
 
 ```bash
 # Deploy the Airlock Microgateway configuration
-kubectl kustomize --enable-helm manifests/nextcloud-microgateway-config | kubectl apply --server-side -f -
+kubectl kustomize --enable-helm web-protect/manifests/nextcloud-microgateway-config | kubectl apply --server-side -f -
 
 # Label the Nextcloud deployment to be protected
 kubectl -n nextcloud patch deployment nextcloud -p '{
@@ -100,7 +102,7 @@ kubectl -n nextcloud rollout status deployment
 ### Protect Juice Shop (data plane mode 'sidecarless')
 ```bash
 # Deploy the Airlock Microgateway configuration
-kubectl kustomize --enable-helm manifests/juice-shop-microgateway-config | kubectl apply --server-side -f -
+kubectl kustomize --enable-helm web-protect/manifests/juice-shop-microgateway-config | kubectl apply --server-side -f -
 
 # The Ingress ressource can be deleted as it is no longer needed.
 kubectl -n juice-shop delete ingress juice-shop

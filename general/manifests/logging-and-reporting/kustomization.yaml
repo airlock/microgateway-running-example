@@ -4,7 +4,7 @@ kind: Kustomization
 
 resources:
 - namespace.yaml
-- promtail
+- alloy
 - loki
 - kube-prometheus-stack
 - grafana

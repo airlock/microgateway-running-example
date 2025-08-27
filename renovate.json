@@ -1,10 +1,14 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
-  ],
-  "schedule": [
-    "after 10am on sunday",
-    "before 5pm on sunday"
-  ]
+  "extends": ["config:recommended"],
+  "enabledManagers": ["kustomize", "helmv3", "helm-values", "kubernetes"],
+  "kustomize": {
+    "managerFilePatterns": ["/(^|/)[Kk]ustomization\\.ya?ml$/"]
+  },
+  "helm-values": {
+    "managerFilePatterns": ["/(^|/)values(\\.[^/]+)?\\.ya?ml$/"]
+  },
+  "kubernetes": {
+    "managerFilePatterns": ["/(^|/)(k8s|manifests|deployments)/.+\\.ya?ml$/"]
+  }
 }

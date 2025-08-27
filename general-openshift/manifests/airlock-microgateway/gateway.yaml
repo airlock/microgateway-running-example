@@ -1,0 +1,31 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: airlock-gateway
+  namespace: airlock-gateway
+spec:
+  infrastructure:
+    parametersRef:
+      group: microgateway.airlock.com
+      kind: GatewayParameters
+      name: gatewayparameters
+  gatewayClassName: airlock-microgateway
+  listeners:
+  - name: http
+    port: 8080
+    protocol: HTTP
+    allowedRoutes:
+      namespaces:
+        from: All
+  - name: https
+    port: 8081
+    protocol: HTTPS
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - kind: Secret
+        name: gateway-tls-cert
+    allowedRoutes:
+      namespaces:
+        from: All

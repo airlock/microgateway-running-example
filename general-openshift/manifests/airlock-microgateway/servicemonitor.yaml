@@ -1,0 +1,57 @@
+---
+# Source: microgateway/templates/operator/servicemonitor.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: airlock-microgateway-operator
+  namespace: airlock-microgateway-system
+  labels:
+    app.kubernetes.io/part-of: microgateway
+    app.kubernetes.io/instance: airlock-microgateway
+    app.kubernetes.io/name: microgateway-operator
+    app.kubernetes.io/component: controller
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: airlock-microgateway
+      app.kubernetes.io/name: microgateway-operator
+      app.kubernetes.io/component: controller
+    matchExpressions:
+      - {key: "operator.microgateway.airlock.com/isLeader", operator: DoesNotExist}
+  endpoints:
+    - path: /metrics
+      port: metrics
+      scheme: http
+      metricRelabelings:
+        - sourceLabels:
+            - __name__
+          regex: ^(microgateway_license|microgateway_sidecars).*$
+          action: drop
+---
+# Source: microgateway/templates/operator/servicemonitor.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: airlock-microgateway-operator-leader
+  namespace: airlock-microgateway-system
+  labels:
+    app.kubernetes.io/part-of: microgateway
+    app.kubernetes.io/instance: airlock-microgateway
+    app.kubernetes.io/name: microgateway-operator
+    app.kubernetes.io/component: controller
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: airlock-microgateway
+      app.kubernetes.io/name: microgateway-operator
+      app.kubernetes.io/component: controller
+      operator.microgateway.airlock.com/isLeader: "true"
+  endpoints:
+    - path: /metrics
+      port: metrics
+      scheme: http
+      metricRelabelings:
+        - sourceLabels:
+            - __name__
+          regex: ^(microgateway_license|microgateway_sidecars).*$
+          action: keep

@@ -1,0 +1,44 @@
+architecture: standalone
+
+image:
+  registry: docker.io
+  repository: bitnami/redis
+  tag: latest # changed to latest due to the bitnami change
+  digest: ""
+
+master:
+  kind: Deployment
+
+  persistence:
+    enabled: false
+
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 1
+    periodSeconds: 1
+
+  readinessProbe:
+    initialDelaySeconds: 0
+
+  livenessProbe:
+    initialDelaySeconds: 0
+
+  containerSecurityContext:
+    enabled: false
+
+  podSecurityContext:
+    enabled: false
+
+networkPolicy:
+  enabled: false
+
+auth:
+  enabled: true
+  password: runningexample
+
+tls:
+  enabled: true
+  existingSecret: redis-certificate
+  certFilename: tls.crt
+  certKeyFilename: tls.key
+  certCAFilename: ca.crt

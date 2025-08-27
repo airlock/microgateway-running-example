@@ -1,5 +1,11 @@
 architecture: standalone
 
+image:
+  registry: docker.io
+  repository: bitnami/redis
+  tag: latest # changed to latest due to the bitnami change
+  digest: ""
+
 master:
   kind: Deployment
 
@@ -16,10 +22,6 @@ master:
 
   livenessProbe:
     initialDelaySeconds: 0
-
-  service:
-    ports:
-      redis: 7777
 
 networkPolicy:
   enabled: false
