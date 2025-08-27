@@ -10,8 +10,8 @@ if [[ -z "${TENANT_ID:-}" || -z "${USER_GROUP_ID:-}" || -z "${ADMIN_GROUP_ID:-}"
 fi
 
 kubectl patch AccessControlPolicy.microgateway.airlock.com webserver -n "$NAMESPACE" --type='json' -p="[
-  {\"op\": \"replace\", \"path\": \"/spec/policies/0/authorization/requireAll/0/oidc/claim/value/matcher/contains\", \"value\": \"$USER_GROUP_ID\"},
-  {\"op\": \"replace\", \"path\": \"/spec/policies/1/authorization/requireAll/0/oidc/claim/value/matcher/contains\", \"value\": \"$ADMIN_GROUP_ID\"}
+  {\"op\": \"replace\", \"path\": \"/spec/policies/1/authorization/requireAll/0/oidc/claim/value/matcher/contains\", \"value\": \"$USER_GROUP_ID\"},
+  {\"op\": \"replace\", \"path\": \"/spec/policies/2/authorization/requireAll/0/oidc/claim/value/matcher/contains\", \"value\": \"$ADMIN_GROUP_ID\"}
 ]"
 
 kubectl patch JWKS webserver -n "$NAMESPACE" --type='json' -p="[

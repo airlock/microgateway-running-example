@@ -1,4 +1,3 @@
----
 apiVersion: microgateway.airlock.com/v1alpha1
 kind: AccessControlPolicy
 metadata:
@@ -9,7 +8,20 @@ spec:
   - group: gateway.networking.k8s.io
     kind: HTTPRoute
     name: webserver
+
   policies:
+  # 0) OIDC tech endpoints: RP must run here
+  - requestConditions:
+      path:
+        matcher:
+          regex: ^/(rp-logout|callback)$
+    authorization:
+      authentication:
+        oidc:
+          oidcRelyingPartyRef:
+            name: webserver-user
+
+  # 1) Protect /user (same RP, admin group)
   - requestConditions:
       path:
         matcher:
@@ -21,7 +33,7 @@ spec:
             name: groups
             value:
               matcher:
-                contains: '<enter object id of the group here>'
+                contains: '<user group object id>'
       authentication:
         oidc:
           oidcRelyingPartyRef:
@@ -29,12 +41,11 @@ spec:
     identityPropagation:
       onFailure: Pass
       actions:
-      - identityPropagationRef:
-          name: webserver-bearer-token
-      - identityPropagationRef:
-          name: webserver-name
-      - identityPropagationRef:
-          name: webserver-email
+      - identityPropagationRef: { name: webserver-bearer-token }
+      - identityPropagationRef: { name: webserver-name }
+      - identityPropagationRef: { name: webserver-email }
+
+  # 2) Protect /admin (same RP, user group)
   - requestConditions:
       path:
         matcher:
@@ -46,21 +57,17 @@ spec:
             name: groups
             value:
               matcher:
-                contains: '<enter object id of the group here>'
+                contains: '<admin group object id>'
       authentication:
         oidc:
           oidcRelyingPartyRef:
-            name: webserver-admin
+            name: webserver-user
     identityPropagation:
       onFailure: Pass
       actions:
-      - identityPropagationRef:
-          name: webserver-bearer-token
-      - identityPropagationRef:
-          name: webserver-name
-      - identityPropagationRef:
-          name: webserver-email
-  # Fallback policy: All other requests (including /) are allowed (authorization disabled).
-  - authorization: {}
+      - identityPropagationRef: { name: webserver-bearer-token }
+      - identityPropagationRef: { name: webserver-name }
+      - identityPropagationRef: { name: webserver-email }
 
-# Entra admin center --> Groups --> All groups --> Object Id of the group
+  # 3) Fallback allow (/, static, /logout.html, etc.)
+  - authorization: {}

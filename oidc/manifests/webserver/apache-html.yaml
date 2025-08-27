@@ -11,6 +11,7 @@ data:
         <h1>Hello!</h1>
         <p>Access to <a href="/user"><strong>/user</strong></a> is just for members of the <strong>mgwuser</strong> group.</p>
         <p>Access to <a href="/admin"><strong>/admin</strong></a> is just for members of the <strong>mgwadmin</strong> group!</p>
+        <p><a href="/logout.html"><strong>Log out</strong></a></p>
       </body>
     </html>
 
@@ -19,7 +20,11 @@ data:
       <head><title>User Zone</title></head>
       <body>
         <h1>Welcome to the user zone</h1>
-        <p><a href="/index.html">Back to Home</a></p>
+        <p>
+          <a href="/index.html">Back to Home</a>
+          &nbsp;|&nbsp;
+          <a href="/logout.html"><strong>Log out</strong></a>
+        </p>
       </body>
     </html>
 
@@ -28,6 +33,52 @@ data:
       <head><title>Admin Zone</title></head>
       <body>
         <h1>Welcome to the admin zone</h1>
-        <p><a href="/index.html">Back to Home</a></p>
+        <p>
+          <a href="/index.html">Back to Home</a>
+          &nbsp;|&nbsp;
+          <a href="/logout.html"><strong>Log out</strong></a>
+        </p>
       </body>
+    </html>
+
+  logout.html: |
+    <!doctype html>
+    <html lang="en">
+    <head>
+      <meta charset="utf-8" />
+      <meta http-equiv="cache-control" content="no-store" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>Signing you out…</title>
+      <style>
+        :root { color-scheme: light dark; }
+        body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 2rem; }
+        .wrap { max-width: 640px; margin: 10vh auto; text-align: center; }
+        .muted { opacity: .7; font-size: .9rem; }
+      </style>
+    </head>
+    <body>
+      <div class="wrap">
+        <h1>Signing you out…</h1>
+        <p class="muted">You can close this tab if nothing happens.</p>
+      </div>
+      <script>
+        if (window.top === window.self) {
+          // 1) Clear the Microgateway session (same-origin; sends cookies)
+          const rpLogout = fetch("/rp-logout", {
+            credentials: "include",
+            cache: "no-store",
+            keepalive: true
+          }).catch(() => { /* ignore errors */ });
+
+          // 2) Then sign out at Microsoft (end the SSO)
+          const tenantId = "<TENANT_ID>"; // e.g. 11111111-2222-3333-4444-555555555555
+          const postLogout = "https://webserver-127-0-0-1.nip.io:8081/";
+          const endSession = "https://login.microsoftonline.com/" + tenantId + "/oauth2/v2.0/logout" +
+                            "?post_logout_redirect_uri=" + encodeURIComponent(postLogout);
+
+          Promise.race([rpLogout, new Promise(r => setTimeout(r, 300))])
+            .finally(() => window.location.replace(endSession));
+        }
+      </script>
+    </body>
     </html>
