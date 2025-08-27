@@ -6,7 +6,6 @@ resources:
 - sessionstore
 - gateway-tls-cert.yaml
 - gateway.yaml
-- gatewayclass.yaml # Not needed with Microgateway 4.7+
 - gatewayparameters.yaml
 - namespace.yaml
 - servicemonitor.yaml
