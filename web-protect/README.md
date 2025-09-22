@@ -13,10 +13,12 @@ This example demonstrates how to secure web applications in Kubernetes using Air
 ![Topology Diagram](media/topology.svg)
 
 **Key Components:**
+
 - **Ingress Controller (Traefik)** for routing
 - **Airlock Microgateway**:
-  - Sidecar data plane mode for Nextcloud
-  - Sidecarless data plane mode (Gateway API) for Juice Shop
+   - Sidecar data plane mode for Nextcloud
+   - Sidecarless data plane mode (Gateway API) for Juice Shop
+
 - **Prometheus + Grafana** for metrics
 - **Loki + Alloy** for logging
 
@@ -42,7 +44,6 @@ This example demonstrates how to secure web applications in Kubernetes using Air
 Before continuing, make sure your environment is prepared by following the instructions in the [General Setup](../general) or [General-OpenShift Setup](../general-openshift).  
 This includes installing required tools, deploying observability components, certificate authorities, Redis, and the Airlock Microgateway itself.
 
-
 ## 🛠 Deploy the examples:
 
 ### Deploy Nextcloud
@@ -57,6 +58,7 @@ kubectl -n nextcloud rollout status deployment,statefulset
 
 > [!NOTE]
 > You can now access Nextcloud via http://nextcloud-127-0-0-1.nip.io/
+>
 > * Username: admin
 > * Password: changeme
 
@@ -82,6 +84,7 @@ kubectl -n juice-shop rollout status deployment
 ## Protect the web application
 
 ### Protect Nextcloud (data plane mode 'sidecar')
+
 > ⚠️ Warning
 > Sidecar mode needs to be installed manually in OpenShift and is not part of the Example.
 
@@ -100,6 +103,7 @@ kubectl -n nextcloud rollout status deployment
 ```
 
 ### Protect Juice Shop (data plane mode 'sidecarless')
+
 ```bash
 # Deploy the Airlock Microgateway configuration
 kubectl kustomize --enable-helm web-protect/manifests/juice-shop-microgateway-config | kubectl apply --server-side -f -
@@ -107,6 +111,7 @@ kubectl kustomize --enable-helm web-protect/manifests/juice-shop-microgateway-co
 # The Ingress ressource can be deleted as it is no longer needed.
 kubectl -n juice-shop delete ingress juice-shop
 ```
+
 > [!NOTE]
 > You can now access the protected Juice Shop via http://juice-shop-127-0-0-1.nip.io:8080/
 
@@ -127,16 +132,19 @@ kubectl -n juice-shop delete ingress juice-shop
 ## 📚 Resources
 
 * [Microgateway manual](https://docs.airlock.com/microgateway/latest/)
-  * [Getting Started](https://docs.airlock.com/microgateway/latest/#data/1660804708742.html)
-  * [System Architecture](https://docs.airlock.com/microgateway/latest/#data/1660804709650.html)
-  * [Installation](https://docs.airlock.com/microgateway/latest/#data/1660804708713.html)
-  * [Troubleshooting](https://docs.airlock.com/microgateway/latest/#data/1659430054787.html)
-  * [API Reference](https://docs.airlock.com/microgateway/latest/index/api/crds/index.html)
+   * [Getting Started](https://docs.airlock.com/microgateway/latest/#data/1660804708742.html)
+   * [System Architecture](https://docs.airlock.com/microgateway/latest/#data/1660804709650.html)
+   * [Installation](https://docs.airlock.com/microgateway/latest/#data/1660804708713.html)
+   * [Troubleshooting](https://docs.airlock.com/microgateway/latest/#data/1659430054787.html)
+   * [API Reference](https://docs.airlock.com/microgateway/latest/index/api/crds/index.html)
+
 * [Release Repository](https://github.com/airlock/microgateway)
 * [Airlock Microgateway labs](https://airlock.instruqt.com/pages/airlock-microgateway-labs)
 
 ## ⚖️ License
+
 View the [detailed license terms](https://www.airlock.com/en/airlock-license) for the software contained in this image.
+
 * Decompiling or reverse engineering is not permitted.
 * Using any of the deny rules or parts of these filter patterns outside of the image is not permitted.
 
@@ -146,6 +154,7 @@ View the [detailed license terms](https://www.airlock.com/en/airlock-license) fo
 Airlock<sup>&#174;</sup> is a security innovation by [ergon](https://www.ergon.ch/en)
 
 <!-- Airlock SAH Logo (different image for light/dark mode) -->
+
 <a href="https://www.airlock.com/en/secure-access-hub/">
 <picture>
     <source media="(prefers-color-scheme: dark)"
