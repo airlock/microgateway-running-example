@@ -166,6 +166,12 @@ Integrating Entra data into your deployment is a crucial step to ensure your app
 The provided `kubectl` commands are optimized for **Linux** environments. If you are using **macOS** or **Windows**, you may need to adjust the commands accordingly.
 
 To get the logout button working, you have to replace line 74 in in the apache-html.yaml manually with the correct tenant ID
+```yaml
+          const tenantId = "<TENANT_ID>"; // e.g. 11111111-2222-3333-4444-555555555555
+```
+
+For convenience, a helper script is provided at [`scripts/patch-oidc-config.sh`](scripts/patch-oidc-config.sh). Set the required environment variables and run the script to apply all patches at once (this does not work for the logout button):
+To get the logout button working, you have to replace line 74 in in the apache-html.yaml manually with the correct tenant ID
 
 ```yaml
           const tenantId = "<TENANT_ID>"; // e.g. 11111111-2222-3333-4444-555555555555
