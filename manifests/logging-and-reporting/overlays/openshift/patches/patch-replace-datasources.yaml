@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana
+  namespace: monitoring
+data:
+  datasources.yaml: |-
+    apiVersion: 1
+    datasources:
+    - name: loki
+      type: loki
+      url: http://loki-gateway/
+      access: proxy
+      version: 1
+      isDefault: true
+      jsonData:
+        maxLines: 1000
+    - name: Prometheus
+      type: prometheus
+      access: proxy
+      url: https://thanos-querier.openshift-monitoring.svc:9091
+      isDefault: false
+      jsonData:
+        tlsSkipVerify: true
+        httpHeaderName1: "Authorization"
+      secureJsonData:
+        httpHeaderValue1: "Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IlhUa09Lek5IUzNoY2s3eDkxNDF0WV92Nlp4RDZBenVwTTk5MHdrM21vNlEifQ.eyJhdWQiOlsiaHR0cHM6Ly9rdWJlcm5ldGVzLmRlZmF1bHQuc3ZjIl0sImV4cCI6MjA3MDYwODAzMywiaWF0IjoxNzU1MjQ4MDMzLCJpc3MiOiJodHRwczovL2t1YmVybmV0ZXMuZGVmYXVsdC5zdmMiLCJqdGkiOiJhNzViM2JlNy1jMDU3LTQ2ZmMtYmFjNS0wNmI4ZGE1NDhiZTEiLCJrdWJlcm5ldGVzLmlvIjp7Im5hbWVzcGFjZSI6Im1vbml0b3JpbmciLCJzZXJ2aWNlYWNjb3VudCI6eyJuYW1lIjoiZ3JhZmFuYSIsInVpZCI6Ijg1YjljMWVmLWU2YzItNDUxMy04MTM3LWZlMTA4NWRjMTNjNSJ9fSwibmJmIjoxNzU1MjQ4MDMzLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6bW9uaXRvcmluZzpncmFmYW5hIn0.dS7IwfZWKQb8po4daS-F_2RHcFjWzhd6s6bhzn8plVlXTJXeDzEEjOB8TEP9JHuUbuWEvpx7q9Mg0zYhJy5vxyKcWu7w-kjVBhhpbktn_eerVO0suX3L56g9355f63mFvyUxi7W0sfcOoybGKgKjLL4v8TP-E0bjbHWye3SYZAzsswbsM__zJZg6F5st-aZG5IHAFgUUi_HsCChYYz6WQQIKyPwLioTyQYimScsH9GvUEM23YIEQLbmroi5xn9nq_j3bb2N1xks_-6BZO5gMOuQ5K8mE2vpOJwcurj2Q79r4CqKXJN4DxTdW22mifj_eq7kIcLPvIazs0puICpjANvc9aTdjoladKR9hWflFPvIH8ny38Ck4MLjDCCGuEJN7XSC4jhfKCvnM_04WuP4keUU5I_FJNPC-lXc6TQM1OgFOlnNKLU0A0xZmptnYwip6cmcdIFfesHmUDVmy-QaIQmdsf0gPPtPM5oSNgELhOKJsGE_d_u8e71baSilAW3wDaJ-Zj5FK_sdk-UJLzZmf-418fc4v0-AjjPgc-8JT2_i7GDr0YY1iljRFW6MMQX3nEOElA-rjMM9IDe-jUgF9NHpKPkhtHhvzpDP5crQPdl4tjsCntWfWXKGn_QIso6JsdlH7AZ3IXGUphDelXK2xn7itbdHNO3BCWHuoYfkLDBo"
