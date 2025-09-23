@@ -20,11 +20,11 @@ spec:
   pathMapping:
     logoutPath:
       matcher:
-        exact: /logout
+        exact: /rp-logout
     redirectPath:
       matcher:
-        exact: /admin/callback
-  redirectURI: "https://%REQ(:authority)%/admin/callback"
+        exact: /callback
+  redirectURI: "https://%REQ(:authority)%/callback"
 
 # Entra admin center --> Applications --> App registrations --> Overview --> Application (client) ID
 ---
@@ -49,10 +49,10 @@ spec:
   pathMapping:
     logoutPath:
       matcher:
-        exact: /logout
+        exact: /rp-logout
     redirectPath:
       matcher:
-        exact: /user/callback
-  redirectURI: "https://%REQ(:authority)%/user/callback"
+        exact: /callback
+  redirectURI: "https://%REQ(:authority)%/callback"
 
 # Entra admin center --> Applications --> App registrations --> Overview --> Application (client) ID
