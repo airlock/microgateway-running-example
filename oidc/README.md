@@ -13,6 +13,7 @@ Extend your secure deployment by integrating **authentication and authorization*
 ![Topology](media/topology.svg)
 
 **Flow Summary:**
+
 - Requests routed through **Traefik Ingress**
 - Services protected with **Airlock Microgateway** in **sidecarless data plane mode**
 - Observability stack (Prometheus, Grafana, Alloy and Loki)
@@ -51,22 +52,20 @@ To run this example, make sure your Entra application is properly configured wit
 ### **Required IDs and Secrets**
 
 - **Group IDs:**  
-  To find the Group IDs, navigate to **Entra Admin Center** → **Groups** → **All groups** and note the **Object ID** for each relevant group:
-  - **User Group ID** (e.g., for regular users)
-  - **Admin Group ID** (e.g., for administrators)
+   To find the Group IDs, navigate to **Entra Admin Center** → **Groups** → **All groups** and note the **Object ID** for each relevant group:
+
+   - **User Group ID** (e.g., for regular users)
+   - **Admin Group ID** (e.g., for administrators)
 
 - **Tenant ID:**  
-  Located on the **Home** page of the **Entra Admin Center**.
-
+   Located on the **Home** page of the **Entra Admin Center**.
 - **Client ID:**  
-  Navigate to **Entra Admin Center** → **Applications** → **App registrations** → **Overview** → **Application (client) ID**.
-
+   Navigate to **Entra Admin Center** → **Applications** → **App registrations** → **Overview** → **Application (client) ID**.
 - **Client Secret:**  
-  Navigate to **Entra Admin Center** → **Applications** → **App registrations** → **Certificates & Secrets** → **Client Secrets** → **New client secret**.  
-  **⚠️ Note:** The secret value is only visible immediately after creation.
-
+   Navigate to **Entra Admin Center** → **Applications** → **App registrations** → **Certificates & Secrets** → **Client Secrets** → **New client secret**.  
+   **⚠️ Note:** The secret value is only visible immediately after creation.
 - **Token and Redirect URI Configuration:**  
-  Ensure the application is configured to send groups as part of the token and that the correct redirect URIs are set.
+   Ensure the application is configured to send groups as part of the token and that the correct redirect URIs are set.
 
 ---
 
@@ -126,34 +125,38 @@ To assist you, here are the key steps in image form. Click the thumbnails for a 
 ---
 
 ## 🛠 Deployment Steps
+
 > [!WARNING]
 > Be aware that this is an example and some security settings are disabled to make this demo as simple as possible (e.g. authentication enforcement, restrictive deny rule configuration and other security settings).
 
 ## Deploy Webserver
+
 ```bash
-kubectl kustomize --enable-helm oidc/manifests/webserver | kubectl apply --server-side -f -
+kubectl kustomize --enable-helm manifests/webserver | kubectl apply --server-side -f -
 
 # Wait until Webserver is up and running
 kubectl -n oidc rollout status deployment webserver
 ```
 
 ## Protect Webserver (data plane mode 'sidecarless')
+
 ```bash
 # Deploy the Airlock Microgateway configuration
-kubectl kustomize --enable-helm oidc/manifests/webserver-microgateway-config | kubectl apply --server-side -f -
+kubectl kustomize --enable-helm manifests/webserver-microgateway-config | kubectl apply --server-side -f -
 ```
 
- > [!WARNING] 
- > If Airlock Microgateway was already deployed and you switched the Gateway API standard to *experimental* (which is required for this example), you may encounter an "error 500".
- > To resolve this:  
- > 1. Delete the Microgateway operator pods. They will restart automatically with the new *experimental* Gateway API CRDs.  
- > 2. Then, delete and reapply the `BackendTLSPolicy` manually.  
-  
- ```bash
- kubectl delete pod -n airlock-microgateway-system $(kubectl get pods -n airlock-microgateway-system -o name | grep airlock-microgateway-operator-)
- 
- kubectl delete -n oidc backendtlspolicies.gateway.networking.k8s.io webserver-tls && kubectl apply -f oidc/manifests/webserver-microgateway-config/backendtlspolicy.yaml
- ```
+> [!WARNING]
+> If Airlock Microgateway was already deployed and you switched the Gateway API standard to *experimental* (which is required for this example), you may encounter an "error 500".
+> To resolve this:
+>
+> 1. Delete the Microgateway operator pods. They will restart automatically with the new *experimental* Gateway API CRDs.
+> 2. Then, delete and reapply the `BackendTLSPolicy` manually.
+
+```bash
+kubectl delete pod -n airlock-microgateway-system $(kubectl get pods -n airlock-microgateway-system -o name | grep airlock-microgateway-operator-)
+
+kubectl delete -n oidc backendtlspolicies.gateway.networking.k8s.io webserver-tls && kubectl apply -f manifests/webserver-microgateway-config/backendtlspolicy.yaml
+```
 
 ## Adding Entra Data to Your Deployment
 
@@ -163,6 +166,7 @@ Integrating Entra data into your deployment is a crucial step to ensure your app
 The provided `kubectl` commands are optimized for **Linux** environments. If you are using **macOS** or **Windows**, you may need to adjust the commands accordingly.
 
 To get the logout button working, you have to replace line 74 in in the apache-html.yaml manually with the correct tenant ID
+
 ```yaml
           const tenantId = "<TENANT_ID>"; // e.g. 11111111-2222-3333-4444-555555555555
 ```
@@ -180,7 +184,6 @@ CLIENT_SECRET=<secret> \
 
 <details>
 <summary>Patch manually:</summary>
-
 
 ```bash
 # Patch of the user group
@@ -201,6 +204,7 @@ kubectl patch AccessControlPolicy.microgateway.airlock.com webserver \
   ]'
 
 ```
+
 ```bash
 # Patch of the admin group
 kubectl patch AccessControlPolicy webserver \
@@ -214,6 +218,7 @@ kubectl patch AccessControlPolicy webserver \
     }
   ]'
 ```
+
 ```bash
 # Patch of the Tenant ID for JWKS
 kubectl patch JWKS webserver \
@@ -227,6 +232,7 @@ kubectl patch JWKS webserver \
     }
   ]'
 ```
+
 ```bash
 # Patch of the client secret
 # Secret has to be in base64 encoded format
@@ -242,6 +248,7 @@ kubectl patch secret oidc-client-password \
     }
   ]'
 ```
+
 ```bash
 # Patch of the issuer URI
 kubectl patch OIDCProvider webserver \
@@ -265,6 +272,7 @@ kubectl patch OIDCProvider webserver \
     }
   ]'
 ```
+
 ```bash
 # Patch for webserver-admin
 kubectl patch OIDCRelyingParty webserver-admin \
@@ -290,9 +298,11 @@ kubectl patch OIDCRelyingParty webserver-user \
     }
   ]'
 ```
+
 </details>
 
 ## Authentication with browser
+
 Sidecarless Base URL: https://webserver-127-0-0-1.nip.io:8081/
 
 | Path   | Usage                                                                  |
@@ -302,6 +312,7 @@ Sidecarless Base URL: https://webserver-127-0-0-1.nip.io:8081/
 | /user  | Authentication required                                                |
 
 ## ⚠️ Important Notes
+
 - The limit of Groups in an OIDC token is limited to 200 by Microsoft.
 - In larger organisations this limit can easily be exceeded.
 - To avoid running into issues due to this limit, an Entra ID administrator should assign the registered OIDC application only the relevant group memberships (recommended for larger enterprises)
@@ -311,16 +322,19 @@ Sidecarless Base URL: https://webserver-127-0-0-1.nip.io:8081/
 ## 📚 Resources
 
 * [Microgateway manual](https://docs.airlock.com/microgateway/latest/)
-  * [Getting Started](https://docs.airlock.com/microgateway/latest/#data/1660804708742.html)
-  * [System Architecture](https://docs.airlock.com/microgateway/latest/#data/1660804709650.html)
-  * [Installation](https://docs.airlock.com/microgateway/latest/#data/1660804708713.html)
-  * [Troubleshooting](https://docs.airlock.com/microgateway/latest/#data/1659430054787.html)
-  * [API Reference](https://docs.airlock.com/microgateway/latest/index/api/crds/index.html)
+   * [Getting Started](https://docs.airlock.com/microgateway/latest/#data/1660804708742.html)
+   * [System Architecture](https://docs.airlock.com/microgateway/latest/#data/1660804709650.html)
+   * [Installation](https://docs.airlock.com/microgateway/latest/#data/1660804708713.html)
+   * [Troubleshooting](https://docs.airlock.com/microgateway/latest/#data/1659430054787.html)
+   * [API Reference](https://docs.airlock.com/microgateway/latest/index/api/crds/index.html)
+
 * [Release Repository](https://github.com/airlock/microgateway)
 * [Airlock Microgateway labs](https://airlock.instruqt.com/pages/airlock-microgateway-labs)
 
 ## ⚖️ License
+
 View the [detailed license terms](https://www.airlock.com/en/airlock-license) for the software contained in this image.
+
 * Decompiling or reverse engineering is not permitted.
 * Using any of the deny rules or parts of these filter patterns outside of the image is not permitted.
 
@@ -330,6 +344,7 @@ View the [detailed license terms](https://www.airlock.com/en/airlock-license) fo
 Airlock<sup>&#174;</sup> is a security innovation by [ergon](https://www.ergon.ch/en)
 
 <!-- Airlock SAH Logo (different image for light/dark mode) -->
+
 <a href="https://www.airlock.com/en/secure-access-hub/">
 <picture>
     <source media="(prefers-color-scheme: dark)"

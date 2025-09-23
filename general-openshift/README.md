@@ -9,9 +9,11 @@ This guide provides the foundational setup required for running Airlock Microgat
 ---
 
 ## 🖼️ Architecture Overview
+
 > ⚠️ This setup is created based on **Red Hat OpenShift Local 4.19**
 
 **Core Components:**
+
 - **Airlock Microgateway** – Data plane security
 - **Prometheus & Grafana** – Metrics and dashboards
 - **Loki & Alloy** – Log aggregation and analysis
@@ -20,18 +22,21 @@ This guide provides the foundational setup required for running Airlock Microgat
 ---
 
 ### Airlock Microgateway Requirements
+
 - Review and fulfill all [Airlock Microgateway prerequisites](https://docs.airlock.com/microgateway/latest/#data/1660804711882.html)
 
 ---
 
 ## 🛡️ Install License
 
- 📝 You must obtain a valid license before continuing:
- - **Community License**: [airlock.com/microgateway-community](https://airlock.com/en/microgateway-community)
- - **Premium License**: [airlock.com/microgateway-premium](https://airlock.com/en/microgateway-premium)
- - 📘 [Community vs. Premium Comparison](https://docs.airlock.com/microgateway/latest/#data/1675772882054.html)
+📝 You must obtain a valid license before continuing:
+
+- **Community License**: [airlock.com/microgateway-community](https://airlock.com/en/microgateway-community)
+- **Premium License**: [airlock.com/microgateway-premium](https://airlock.com/en/microgateway-premium)
+- 📘 [Community vs. Premium Comparison](https://docs.airlock.com/microgateway/latest/#data/1675772882054.html)
 
 ### Deploy the License
+
 ```bash
 oc create ns airlock-microgateway-system --dry-run=client -o yaml | oc apply -f -
 
@@ -39,16 +44,19 @@ oc -n airlock-microgateway-system create secret generic airlock-microgateway-lic
 ```
 
 ## 🗃️ Deploy Cert-Manager Operator for Red Hat OpenShift via OperatorHub
+
 Keep the recommended namespace **cert-manager-operator** during install.
 
 ## 🗄️📜 Deploy Certificate Authority (CA)
+
 ```bash
-oc kustomize --enable-helm general-openshift/manifests/ca | oc apply --server-side -f -
+oc kustomize --enable-helm manifests/ca | oc apply --server-side -f -
 ```
 
 ## 🔐 Deploy Redis (Session Store)
+
 ```bash
-oc kustomize --enable-helm general-openshift/manifests/redis-sessionstore | oc apply --server-side -f -
+oc kustomize --enable-helm manifests/redis-sessionstore | oc apply --server-side -f -
 
 # Wait until the Redis is up and running
 oc -n redis rollout status deployment
@@ -57,13 +65,14 @@ oc -n redis rollout status deployment
 ## 📊 Deploy Logging and Monitoring Stack
 
 ```bash
-oc kustomize --enable-helm general-openshift/manifests/logging-and-reporting | oc apply --server-side -f -
+oc kustomize --enable-helm manifests/logging-and-reporting-openshift | oc apply --server-side -f -
 
 # Wait until Grafana is up and running
 oc -n monitoring rollout status deployment
 ```
 
 ### Create the binding and tokens to access Promethues via Thanos
+
 ```bash
 oc adm policy add-cluster-role-to-user cluster-monitoring-view \
   -z grafana \
@@ -71,23 +80,26 @@ oc adm policy add-cluster-role-to-user cluster-monitoring-view \
 ```
 
 ### Replace the example token with your own Token  in the Grafana values.yaml and reapply Grafana
+
 ```bash
 oc create token grafana -n monitoring --duration=87600h > grafana-token.txt #valid for 10 years
 
 cat grafana-token.txt 
 
-oc kustomize --enable-helm general-openshift/manifests/logging-and-reporting/grafana | oc apply --server-side -f -
+oc kustomize --enable-helm manifests/logging-and-reporting-openshift/grafana | oc apply --server-side -f -
 ```
 
 > [!NOTE]
 > You can now access
+>
 > * Grafana via http://grafana-127-0-0-1.nip.io/
 
 ### Install Loki communiti edition via Operator Hub (from opdev)
 
 Apply RBAC to grant Loki access:
+
 ```bash
-kubectl kustomize --enable-helm general-openshift/manifests/logging-and-reporting/loki-community | kubectl apply --server-side -f -
+kubectl kustomize --enable-helm manifests/logging-and-reporting-openshift/loki-community | kubectl apply --server-side -f -
 ```
 
 Open Loki via installed Operator and apply the following config.
@@ -144,12 +156,12 @@ spec:
 </details>
 
 ### Install Alloy
+
 ```bash
-kubectl kustomize --enable-helm general-openshift/manifests/logging-and-reporting/alloy/ | kubectl apply --server-side -f -
+kubectl kustomize --enable-helm manifests/logging-and-reporting-openshift/alloy/ | kubectl apply --server-side -f -
 
 oc adm policy add-scc-to-user privileged -z alloy -n monitoring
 ```
-
 
 ## 🚀 Install Airlock Microgateway via OperatorHub
 
@@ -169,8 +181,9 @@ kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/downloa
 ```
 
 ### Airlock Microgateway configure the after it was installed via OperatorHub
+
 ```bash
-oc kustomize --enable-helm general-openshift/manifests/airlock-microgateway | oc apply -f -
+oc kustomize --enable-helm manifests/airlock-microgateway-openshift | oc apply -f -
 
 
 Activate the Podmonitor, by editing the subscription of the Airlock operator:
@@ -186,16 +199,19 @@ spec:
 ## 📚 Resources
 
 * [Microgateway manual](https://docs.airlock.com/microgateway/latest/)
-  * [Getting Started](https://docs.airlock.com/microgateway/latest/#data/1660804708742.html)
-  * [System Architecture](https://docs.airlock.com/microgateway/latest/#data/1660804709650.html)
-  * [Installation](https://docs.airlock.com/microgateway/latest/#data/1660804708713.html)
-  * [Troubleshooting](https://docs.airlock.com/microgateway/latest/#data/1659430054787.html)
-  * [API Reference](https://docs.airlock.com/microgateway/latest/index/api/crds/index.html)
+   * [Getting Started](https://docs.airlock.com/microgateway/latest/#data/1660804708742.html)
+   * [System Architecture](https://docs.airlock.com/microgateway/latest/#data/1660804709650.html)
+   * [Installation](https://docs.airlock.com/microgateway/latest/#data/1660804708713.html)
+   * [Troubleshooting](https://docs.airlock.com/microgateway/latest/#data/1659430054787.html)
+   * [API Reference](https://docs.airlock.com/microgateway/latest/index/api/crds/index.html)
+
 * [Release Repository](https://github.com/airlock/microgateway)
 * [Airlock Microgateway labs](https://airlock.instruqt.com/pages/airlock-microgateway-labs)
 
 ## ⚖️ License
+
 View the [detailed license terms](https://www.airlock.com/en/airlock-license) for the software contained in this image.
+
 * Decompiling or reverse engineering is not permitted.
 * Using any of the deny rules or parts of these filter patterns outside of the image is not permitted.
 
@@ -205,6 +221,7 @@ View the [detailed license terms](https://www.airlock.com/en/airlock-license) fo
 Airlock<sup>&#174;</sup> is a security innovation by [ergon](https://www.ergon.ch/en)
 
 <!-- Airlock SAH Logo (different image for light/dark mode) -->
+
 <a href="https://www.airlock.com/en/secure-access-hub/">
 <picture>
     <source media="(prefers-color-scheme: dark)"
