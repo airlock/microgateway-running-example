@@ -11,5 +11,5 @@ helmCharts:
     releaseName: nextcloud
     namespace: nextcloud
     repo: https://nextcloud.github.io/helm/
-    version: 8.0.1
+    version: 8.0.3
     valuesFile: values.yaml
