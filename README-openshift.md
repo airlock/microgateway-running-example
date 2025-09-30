@@ -56,7 +56,7 @@ oc kustomize --enable-helm manifests/ca | oc apply --server-side -f -
 ## 🔐 Deploy Redis (Session Store)
 
 ```bash
-oc kustomize --enable-helm manifests/redis-sessionstore | oc apply --server-side -f -
+oc kustomize --enable-helm manifests/redis-sessionstore/overlays/openshift | oc apply --server-side -f -
 
 # Wait until the Redis is up and running
 oc -n redis rollout status deployment

@@ -74,7 +74,7 @@ kubectl kustomize --enable-helm manifests/ca | kubectl apply --server-side -f -
 ## 🗄️ Deploy Redis (Session Store)
 
 ```bash {"cwd":""}
-kubectl kustomize --enable-helm manifests/redis-sessionstore | kubectl apply --server-side -f -
+kubectl kustomize --enable-helm manifests/redis-sessionstore/overlays/k8s | kubectl apply --server-side -f -
 
 # Wait until the Redis is up and running
 kubectl -n redis rollout status deployment
