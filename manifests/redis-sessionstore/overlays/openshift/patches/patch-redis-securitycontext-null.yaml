@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-master
+  namespace: redis
+spec:
+  template:
+    spec:
+      # Disable podSecurityContext
+      securityContext: null
+      # Disable containerSecurityContext for the 'redis' container
+      containers:
+      - name: redis
+        securityContext: null
