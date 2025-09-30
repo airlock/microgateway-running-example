@@ -49,7 +49,7 @@ This includes installing required tools, deploying observability components, cer
 
 ### Deploy Nextcloud
 
-```bash
+```bash {"cwd":"../"}
 # Deploy Nextcloud
 kubectl kustomize --enable-helm manifests/nextcloud | kubectl apply --server-side -f -
 
@@ -68,7 +68,7 @@ kubectl -n nextcloud rollout status deployment,statefulset
 
 ### Deploy Juice Shop
 
-```bash
+```bash {"cwd":"../"}
 # Deploy Juice Shop
 kubectl kustomize --enable-helm manifests/juice-shop | kubectl apply --server-side -f -
 
@@ -89,7 +89,7 @@ kubectl -n juice-shop rollout status deployment
 > ⚠️ Warning
 > Sidecar mode needs to be installed manually in OpenShift and is not part of the Example.
 
-```bash
+```bash {"cwd":"../"}
 # Deploy the Airlock Microgateway configuration
 kubectl kustomize --enable-helm manifests/nextcloud-microgateway-config | kubectl apply --server-side -f -
 
@@ -105,7 +105,7 @@ kubectl -n nextcloud rollout status deployment
 
 ### Protect Juice Shop (data plane mode 'sidecarless')
 
-```bash
+```bash {"cwd":"../"}
 # Deploy the Airlock Microgateway configuration
 kubectl kustomize --enable-helm manifests/juice-shop-microgateway-config | kubectl apply --server-side -f -
 

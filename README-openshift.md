@@ -86,7 +86,7 @@ oc create token grafana -n monitoring --duration=87600h > grafana-token.txt #val
 
 cat grafana-token.txt 
 
-oc kustomize --enable-helm manifests/logging-and-reporting-openshift/grafana | oc apply --server-side -f -
+oc kustomize --enable-helm manifests/logging-and-reporting/overlays/openshift | oc apply --server-side -f -
 ```
 
 > [!NOTE]
@@ -99,7 +99,7 @@ oc kustomize --enable-helm manifests/logging-and-reporting-openshift/grafana | o
 Apply RBAC to grant Loki access:
 
 ```bash
-kubectl kustomize --enable-helm manifests/logging-and-reporting-openshift/loki-community | kubectl apply --server-side -f -
+kubectl kustomize --enable-helm manifests/logging-and-reporting/overlays/openshift/loki-community | kubectl apply --server-side -f -
 ```
 
 Open Loki via installed Operator and apply the following config.
@@ -158,8 +158,6 @@ spec:
 ### Install Alloy
 
 ```bash
-kubectl kustomize --enable-helm manifests/logging-and-reporting-openshift/alloy/ | kubectl apply --server-side -f -
-
 oc adm policy add-scc-to-user privileged -z alloy -n monitoring
 ```
 
