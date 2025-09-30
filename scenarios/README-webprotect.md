@@ -30,7 +30,7 @@ This example demonstrates how to secure web applications in Kubernetes using Air
 | Application | URL |
 |------------|-----|
 | Nextcloud | [http://nextcloud-127-0-0-1.nip.io/](http://nextcloud-127-0-0-1.nip.io/) (Login: admin/changeme) |
-| Juice Shop, protected | [[http://juice-shop-127-0-0-1.nip.io:8080/](http://juice-shop-127-0-0-1.nip.io:8080/) |
+| Juice Shop | [[http://juice-shop-127-0-0-1.nip.io:8080/](http://juice-shop-127-0-0-1.nip.io:8080/) |
 
 ---
 
