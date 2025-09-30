@@ -30,7 +30,8 @@ master:
   # Let OpenShift inject allowed IDs via SCC; do not set SELinux options
   podSecurityContext:
     enabled: true
-    fsGroup: null
+    fsGroup: 1001
+    fsGroupChangePolicy: Always
     seLinuxOptions: null
     seccompProfile:
       type: RuntimeDefault

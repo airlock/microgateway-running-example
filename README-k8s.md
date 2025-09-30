@@ -58,7 +58,7 @@ kubectl -n airlock-microgateway-system create secret generic airlock-microgatewa
 
 For an easy start in non-production environments, you may deploy the same [cert-manager](https://cert-manager.io/) we are using internally for testing.
 
-```bash
+```bash {"cwd":""}
 kubectl kustomize --enable-helm manifests/cert-manager | kubectl apply --server-side -f -
 
 # Wait until the cert-manager is up and running
@@ -67,13 +67,13 @@ kubectl -n cert-manager rollout status deployment
 
 ## 📜 Deploy Certificate Authority (CA)
 
-```bash
+```bash {"cwd":""}
 kubectl kustomize --enable-helm manifests/ca | kubectl apply --server-side -f -
 ```
 
 ## 🗄️ Deploy Redis (Session Store)
 
-```bash
+```bash {"cwd":""}
 kubectl kustomize --enable-helm manifests/redis-sessionstore | kubectl apply --server-side -f -
 
 # Wait until the Redis is up and running
