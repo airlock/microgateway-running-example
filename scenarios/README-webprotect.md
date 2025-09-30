@@ -15,11 +15,7 @@ This example demonstrates how to secure web applications in Kubernetes using Air
 **Key Components:**
 
 - **Ingress Controller (Traefik)** for routing
-- **Airlock Microgateway**:
-
-   - Sidecar data plane mode for Nextcloud
-   - Sidecarless data plane mode (Gateway API) for Juice Shop
-
+- **Airlock Microgateway** for protection and routing
 - **Prometheus + Grafana** for metrics
 - **Loki + Alloy** for logging
 
@@ -29,8 +25,8 @@ This example demonstrates how to secure web applications in Kubernetes using Air
 
 | Application | URL |
 |------------|-----|
-| Nextcloud | [http://nextcloud-127-0-0-1.nip.io/](http://nextcloud-127-0-0-1.nip.io/) (Login: admin/changeme) |
-| Juice Shop | [[http://juice-shop-127-0-0-1.nip.io:8080/](http://juice-shop-127-0-0-1.nip.io:8080/) |
+| Nextcloud | [http://nextcloud-127-0-0-1.nip.io:8080/](http://nextcloud-127-0-0-1.nip.io:8080/) (Login: admin/changeme) |
+| Juice Shop | [http://juice-shop-127-0-0-1.nip.io:8080/](http://juice-shop-127-0-0-1.nip.io:8080/) |
 
 ---
 
@@ -56,15 +52,6 @@ kubectl kustomize --enable-helm manifests/nextcloud | kubectl apply --server-sid
 kubectl -n nextcloud rollout status deployment,statefulset
 ```
 
-> [!NOTE]
-> You can now access Nextcloud via http://nextcloud-127-0-0-1.nip.io/
->
-> * Username: admin
-> * Password: changeme
-
-> [!IMPORTANT]
-> The web application is not yet protected by Airlock Microgateway. Protection will be enabled later (see [Protect the web application](#protect-the-web-application)).
-
 ### Deploy Juice Shop
 
 ```bash {"cwd":"../"}
@@ -77,49 +64,28 @@ kubectl -n juice-shop rollout status deployment
 
 ## Protect the web application
 
-### Protect Nextcloud (data plane mode 'sidecar')
-
-> ⚠️ Warning
-> Sidecar mode needs to be installed manually in OpenShift and is not part of the Example.
+### Protect Nextcloud
 
 ```bash {"cwd":"../"}
 # Deploy the Airlock Microgateway configuration
 kubectl kustomize --enable-helm manifests/nextcloud-microgateway-config | kubectl apply --server-side -f -
-
-# Label the Nextcloud deployment to be protected
-kubectl -n nextcloud patch deployment nextcloud -p '{
-   "spec":{ "template": {"metadata": {"labels": {
-               "sidecar.microgateway.airlock.com/inject":"true"
-            } } } } }'
-
-# Wait until the Nextcloud is rolled out with Microgateway
-kubectl -n nextcloud rollout status deployment
 ```
 
-### Protect Juice Shop (data plane mode 'sidecarless')
+> [!NOTE]
+> You can now access Nextcloud via http://nextcloud-127-0-0-1.nip.io:8080/
+>
+> * Username: admin
+> * Password: changeme
+
+### Protect Juice Shop
 
 ```bash {"cwd":"../"}
 # Deploy the Airlock Microgateway configuration
 kubectl kustomize --enable-helm manifests/juice-shop-microgateway-config | kubectl apply --server-side -f -
-
-# The Ingress ressource can be deleted as it is no longer needed.
-kubectl -n juice-shop delete ingress juice-shop
 ```
 
 > [!NOTE]
 > You can now access the protected Juice Shop via http://juice-shop-127-0-0-1.nip.io:8080/
-
-## 🔁 Data plane mode 'Sidecar' vs. 'Sidecarless'
-
-| Feature | Sidecar | Sidecarless |
-|--------|---------|-------------|
-| Resource Usage | Low | Even lower |
-| License Impact | Higher | Lower |
-| CNI Plugin | Required | Not required |
-| Compatibility | Istio, Cilium | No dependencies |
-| Updates | App restart | Gateway restart |
-| Application Location | Inside Kubernetes | Inside/outside |
-| North-South & East-West Traffic | Supported | Supported |
 
 ---
 

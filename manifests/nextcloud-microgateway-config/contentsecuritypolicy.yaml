@@ -1,0 +1,19 @@
+---
+apiVersion: microgateway.airlock.com/v1alpha1
+kind: ContentSecurityPolicy
+metadata:
+  name: nextcloud
+  namespace: nextcloud
+spec:
+  targetRefs:
+  - group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    name: nextcloud
+  secured:
+    headerRewritesRef:
+      name: header-rewrites-nextcloud
+    filter:
+      denyRulesRef:
+        name: deny-rule-nextcloud
+    limitsRef:
+      name: limits-nextcloud

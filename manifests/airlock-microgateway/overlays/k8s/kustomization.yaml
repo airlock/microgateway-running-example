@@ -6,12 +6,6 @@ resources:
 - ../../base
 
 helmCharts:
-- name: microgateway-cni
-  releaseName: airlock-microgateway
-  namespace: kube-system
-  repo: oci://quay.io/airlockcharts
-  version: 4.7.1
-  valuesFile: microgateway-cni-values.yaml
 - name: microgateway
   releaseName: airlock-microgateway
   namespace: airlock-microgateway-system
