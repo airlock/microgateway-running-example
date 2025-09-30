@@ -13,7 +13,7 @@
 In modern DevSecOps pipelines, security and therefore a WAAP solution must be agile, scalable, and seamlessly integrated into the CI/CD lifecycle.
 Airlock Microgateway is the perfect fit for these requirements, as it is optimized for Kubernetes environments.
 
- **Benefits**:
+**Benefits**:
 
 - **Comprehensive WAAP**: Robust security through continuously improved deny rules to provide protection for [OWASP Top 10](https://owasp.org/www-project-top-ten/) attacks, API schema enforcement for OpenAPI and GraphQL, and insightful dashboards.
 - **Identity Aware Proxy**: Enforces secure, modern authentication mechanisms with fine-grained access control for web applications and APIs.
@@ -30,10 +30,10 @@ For a list of all features, view the [comparison of the community and premium ed
 
 This repository includes hands-on examples to help you deploy and use Airlock Microgateway in real-world scenarios:
 
-- [`general/`](./general): Prepare the environment with required licensing, and tooling used by all examples.
-- [`general-openshift`](./general-openshift): Based on Red Hat OpenShift
-- [`web-protect/`](./web-protect): Secure your web application against threats.
-- [`oidc/`](./oidc): Integrate upfront authentication and access control using OIDC.
+- [`general/`](./README-k8s.md): Prepare the environment with required licensing, and tooling used by all examples.
+- [`general-openshift`](./README-openshift.md): Based on Red Hat OpenShift
+- [`web-protect/`](./scenarios/README-webprotect.md): Secure your web application against threats.
+- [`oidc/`](./scenarios/README-oidc.md): Integrate upfront authentication and access control using OIDC.
 
 ## 🏁 Quick Start
 
@@ -41,13 +41,13 @@ This repository includes hands-on examples to help you deploy and use Airlock Mi
 2. Continue with the example of your choice:
    - [Web Protection](./web-protect)
    - [OIDC Authentication](./oidc)
-   
+
 ---
 
 ## ⚖️ License
 
 Source code for the examples is provided under the [MIT License](./LICENSE). Commercial use requires compliance with licensing terms for Airlock Microgateway.
 
-
 ## Disclaimer
+
 Airlock Microgateway is available as community and premium editions. See [Community vs. Premium editions in detail](https://docs.airlock.com/microgateway/latest/#data/1675772882054.html) to choose the right license type. Anyway, this example setup can be deployed with both editions of Airlock Microgateway.
