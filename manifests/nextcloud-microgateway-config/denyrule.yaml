@@ -2,7 +2,7 @@
 apiVersion: microgateway.airlock.com/v1alpha1
 kind: DenyRules
 metadata:
-  name: deny-rule-nextcloud
+  name: nextcloud
   namespace: nextcloud
 spec:
   request:
@@ -11,12 +11,39 @@ spec:
         level: Standard
         threatHandlingMode: Block
       exceptions:
-        # Exclude SQL block for passwords
-        - blockedData:
-            parameter:
-              name:
-                matcher:
-                  exact: password
-          ruleKeys:
-            - SQL
+      # Exclude SQL block for passwords
+      - blockedData:
+          parameter:
+            name:
+              matcher:
+                exact: password
+
+        ruleKeys:
+        - SQL
+      # Exclude any path segment with value ".gitignore" for IDOR
+      - blockedData:
+          pathSegment:
+            value:
+              matcher:
+                exact: .gitignore
+        ruleKeys:
+        - IDOR
+
+      # Exclude common media/subtitle file types from SQL rule
+      - blockedData:
+          pathSegment:
+            value:
+              matcher:
+                regex: ".*\\.(?i)(mp4|srt|sub|vtt|avi|mkv|mov)$"
+        ruleKeys:
+        - SQL
+
+      # Same for NOSQL rule
+      - blockedData:
+          pathSegment:
+            value:
+              matcher:
+                regex: ".*\\.(?i)(mp4|srt|sub|vtt|avi|mkv|mov)$"
+        ruleKeys:
+        - NOSQL
     custom: {}

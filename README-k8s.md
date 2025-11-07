@@ -12,7 +12,7 @@ This guide provides the foundational setup required for running Airlock Microgat
 
 **Core Components:**
 
-- **Ingress Controller (e.g. Traefik)** – Routing and traffic management
+- **Ingress API Controller (e.g. Traefik)** – Routing and traffic management
 - **Airlock Microgateway** – Data plane security
 - **Prometheus & Grafana** – Metrics and dashboards
 - **Loki & Alloy** – Log aggregation and analysis
@@ -30,7 +30,7 @@ Make sure the following tools are installed:
 - [`kubectl`](https://kubernetes.io/docs/reference/kubectl/overview/)
 - [`helm`](https://helm.sh/docs/intro/install/)
 - [`kustomize`](https://kustomize.io) (version ≥ 5.2.1)
-- A running **Kubernetes cluster** with an **Ingress Controller** (e.g. Traefik, Ingress NGINX)
+- A running **Kubernetes cluster** with an **Ingress API Controller** (e.g. Traefik, Ingress NGINX)
 
 ### Airlock Microgateway Requirements
 
@@ -109,25 +109,10 @@ kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/downloa
 
 ## 🚀 Deploy Airlock Microgateway
 
-> [!TIP]
-> Certain environments such as OpenShift or GKE require non-default configurations when installing the CNI plugin. In case that the CNI plugin does not start properly consult [Troubleshooting Microgateway CNI](https://docs.airlock.com/microgateway/latest/#data/1710781909882.html).
-
-[!NOTE]
-In case this example is not deployed in Rancher Desktop, most likely the `cniBinDir`and `cniNetDir`in the file `manifests/airlock-microgateway/microgateway-cni-values.yaml` must be adjusted.
-Example:
-
-```sh
-config:
-  cniBinDir: "/usr/libexec/cni/"
-  cniNetDir: "/etc/cni/net.d"
-```
-
 ```bash
-# Deploy Airlock Microgateway including the CNI plugin
 kubectl kustomize --enable-helm manifests/airlock-microgateway/overlays/k8s | kubectl apply -f -
 
 # Wait until Airlock Microgateway is up and running
-kubectl -n kube-system rollout status daemonset airlock-microgateway-microgateway-cni
 kubectl -n airlock-microgateway-system rollout status deployment
 ```
 

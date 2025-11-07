@@ -94,7 +94,7 @@ oc kustomize --enable-helm manifests/logging-and-reporting/overlays/openshift | 
 >
 > * Grafana via http://grafana-127-0-0-1.nip.io/
 
-### Install Loki communiti edition via Operator Hub (from opdev)
+### Install Loki community edition via Operator Hub (from opdev)
 
 Apply RBAC to grant Loki access:
 

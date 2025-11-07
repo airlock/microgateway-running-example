@@ -11,9 +11,9 @@ spec:
     name: nextcloud
   secured:
     headerRewritesRef:
-      name: header-rewrites-nextcloud
+      name: nextcloud
     filter:
       denyRulesRef:
-        name: deny-rule-nextcloud
+        name: nextcloud
     limitsRef:
-      name: limits-nextcloud
+      name: nextcloud

@@ -14,10 +14,11 @@ This example demonstrates how to secure web applications in Kubernetes using Air
 
 **Key Components:**
 
-- **Ingress Controller (Traefik)** for routing
-- **Airlock Microgateway** for protection and routing
-- **Prometheus + Grafana** for metrics
-- **Loki + Alloy** for logging
+- **Klipper-LB** is the implementation used by ServiceLB to expose LoadBalancer services via host ports.
+- **Ingress API Controller (Traefik)** for non GatewayAPI traffic.
+- **Airlock Microgateway** for protection and routing.
+- **Prometheus + Grafana** for metrics.
+- **Loki + Alloy** for logging.
 
 ---
 
@@ -25,7 +26,7 @@ This example demonstrates how to secure web applications in Kubernetes using Air
 
 | Application | URL |
 |------------|-----|
-| Nextcloud | [http://nextcloud-127-0-0-1.nip.io:8080/](http://nextcloud-127-0-0-1.nip.io:8080/) (Login: admin/changeme) |
+| Nextcloud | [http://nextcloud-127-0-0-1.nip.io/](http://nextcloud-127-0-0-1.nip.io/) (Login: admin/changeme) |
 | Juice Shop | [http://juice-shop-127-0-0-1.nip.io:8080/](http://juice-shop-127-0-0-1.nip.io:8080/) |
 
 ---
@@ -35,9 +36,41 @@ This example demonstrates how to secure web applications in Kubernetes using Air
 > [!WARNING]
 > Be aware that this is an example and some security settings are disabled to make this demo as simple as possible (e.g. authentication enforcement, restrictive deny rule configuration and other security settings).
 
-## 🧰 General Prerequisites
+## Gateway API Deployment
 
-Before continuing, make sure your environment is prepared by following the instructions in the [General Setup](../general) or [General-OpenShift Setup](../general-openshift).  
+### Overview
+
+> [!NOTE]
+> Gateway API (exposed via a Service: LoadBalancer) acts as an ingress for traffic, but it is not the legacy Kubernetes Ingress API. It replaces the old Ingress resource with a richer, standardized model!
+
+The WebProtect scenarios include two Gateway API deployment patterns:
+
+- **Microgateway as ingress (type LoadBalancer)** — a global Microgateway shared between *Juice Shop* and *OIDC Demo*.
+- **Microgateway as an in-cluster Gateway** — an isolated Microgateway for *Nextcloud*, deployed as *cluster-local* (ClusterIP) and exposed indirectly through an *Ingress API/Route*.
+
+This setup allows both _Ingress API-first_ environments and _Gateway API–centric_ deployments to coexist within the same cluster.
+More details are available in our documentation [Gateway deployment](https://docs.airlock.com/microgateway/latest/index/1725073468781.html#Gateway_deployment)
+
+---
+
+### Architecture Summary
+
+**Microgateway as ingress (Juice Shop & OIDC Demo)**
+
+- A single Gateway instance serves multiple applications.
+- Each application is attached via its own `HTTPRoute`.
+- Simplifies management and TLS configuration for common demo or staging workloads.
+
+**Microgateway as an in-cluster Gateway (Nextcloud)**
+
+- A dedicated Gateway limited to cluster scope (`ClusterIP`).
+- Not directly exposed externally.
+- Accessible only through a traditional Ingress API or OpenShift Route that forwards traffic into the internal Gateway.
+- Simulates environments where the *Ingress API/Route* layer remains mandatory for policy compliance or routing consistency.
+
+---
+
+Before continuing, make sure your environment is prepared by following the instructions in the [General Kubernetes Setup](../README-k8s.md) or [General OpenShift Setup](../README-openshift.md).  
 This includes installing required tools, deploying observability components, certificate authorities, Redis, and the Airlock Microgateway itself.
 
 ## 🛠 Deploy the examples:
@@ -72,7 +105,7 @@ kubectl kustomize --enable-helm manifests/nextcloud-microgateway-config | kubect
 ```
 
 > [!NOTE]
-> You can now access Nextcloud via http://nextcloud-127-0-0-1.nip.io:8080/
+> You can now access Nextcloud via http://nextcloud-127-0-0-1.nip.io
 >
 > * Username: admin
 > * Password: changeme

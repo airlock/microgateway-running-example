@@ -2,7 +2,7 @@
 apiVersion: microgateway.airlock.com/v1alpha1
 kind: HeaderRewrites
 metadata:
-  name: header-rewrites-nextcloud
+  name: nextcloud
   namespace: nextcloud
 spec:
   settings:
@@ -13,7 +13,60 @@ spec:
         builtIn:
           standardHeaders: true
         custom:
-        - name: Allow mandatory nextcloud header
+        - name: Allow mandatory Request Headers
+          headers:
+          - name:
+              matcher:
+                exact: sec-ch-ua
+          - name:
+              matcher:
+                exact: sec-ch-ua-platform
+          - name:
+              matcher:
+                exact: sec-ch-ua-mobile
+          - name:
+              matcher:
+                exact: sec-fetch-site
+          - name:
+              matcher:
+                exact: sec-fetch-mode
+          - name:
+              matcher:
+                exact: sec-fetch-dest
+          - name:
+              matcher:
+                exact: x-nc-caldav-webcal-caching
+          - name:
+              matcher:
+                exact: accept-encoding
+          - name:
+              matcher:
+                exact: priority
+          - name:
+              matcher:
+                exact: depth
+          - name:
+              matcher:
+                exact: destination
+          - name:
+              matcher:
+                exact: oc-chunk-offset
+          - name:
+              matcher:
+                exact: oc-checksum
+          - name:
+              matcher:
+                exact: oc-chunk-size
+          - name:
+              matcher:
+                exact: oc-total-length
+          - name:
+              matcher:
+                exact: x-oc-mtime
+          - name:
+              matcher:
+                exact: ocs-apirequest
+        - name: Allow Requesttoken-Token header
           headers:
           - name:
               matcher:
@@ -22,25 +75,3 @@ spec:
       builtIn:
         alternativeForwardedHeaders: true
     add: {}
-  response:
-    allow:
-      allHeaders: {}
-    remove:
-      builtIn:
-        informationLeakage:
-          server: true
-          application: true
-        auth:
-          basic: false
-          ntlm: true
-          negotiate: true
-        permissiveCors: true
-    add:
-      builtIn:
-        xFrameOptions: true
-        hsts: true
-        hstsPreload: false
-        csp: true
-        xContentTypeOptions: true
-        referrerPolicy: true
-        featurePolicy: true
