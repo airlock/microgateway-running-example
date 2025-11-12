@@ -15,7 +15,3 @@ spec:
       name: web-ca
       group: ""
     hostname: webserver-127-0-0-1.nip.io
-  options:
-    microgateway.airlock.com/minimumVersion: TLSv1_2
-    microgateway.airlock.com/maximumVersion: TLSv1_3
-    microgateway.airlock.com/ciphers: ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES256-GCM-SHA384

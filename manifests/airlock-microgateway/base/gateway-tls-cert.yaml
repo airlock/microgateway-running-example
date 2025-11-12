@@ -8,10 +8,7 @@ spec:
   secretName: gateway-tls-cert
   commonName: gateway-127-0-0-1.nip.io
   dnsNames:
-  - webserver-127-0-0-1.nip.io
-  - juice-shop-127-0-0-1.nip.io
-  - gateway-127-0-0-1.nip.io
-  - nextcloud-127-0-0-1.nip.io
+  - "*.nip.io"
   issuerRef:
     name: cluster-ca-issuer
     kind: ClusterIssuer
