@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: airlock-ca
+  namespace: nextcloud
+spec:
+  secretName: airlock-ca
+  duration: 87600h
+  renewBefore: 720h
+  isCA: false
+  commonName: airlock-ca
+  issuerRef:
+    name: cluster-ca-issuer
+    kind: ClusterIssuer

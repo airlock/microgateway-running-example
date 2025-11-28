@@ -94,7 +94,7 @@ oc kustomize --enable-helm manifests/logging-and-reporting/overlays/openshift | 
 >
 > * Grafana via http://grafana-127-0-0-1.nip.io/
 
-### Install Loki communiti edition via Operator Hub (from opdev)
+### Install Loki community edition via Operator Hub (from opdev)
 
 Apply RBAC to grant Loki access:
 
@@ -171,11 +171,7 @@ oc adm policy add-scc-to-user privileged -z alloy -n monitoring
 If you have an OpenShift version <= 4.18 please install the GatewayAPI CRDs manually.
 
 ```bash
-# Please install experimental for backendTLS support needed for the OIDC example.
-kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/experimental-install.yaml
-
-# Standard version with no experimental features. OIDC example will not work with it or needs to be manually adjusted.
-kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/standard-install.yaml
+kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/standard-install.yaml
 ```
 
 ### Airlock Microgateway configure the after it was installed via OperatorHub

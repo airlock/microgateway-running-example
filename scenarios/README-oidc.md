@@ -14,8 +14,8 @@ Extend your secure deployment by integrating **authentication and authorization*
 
 **Flow Summary:**
 
-- Requests routed through **Traefik Ingress**
-- Services protected with **Airlock Microgateway** in **sidecarless data plane mode**
+- Requests routed through **Microgateway as ingress (GatewayAPI)**
+- Services protected with **Airlock Microgateway** in mode: **as ingress** (⚠️ not Ingress API)
 - Observability stack (Prometheus, Grafana, Alloy and Loki)
 - Authentication via **Microsoft Entra ID (formerly known as Azure AD)**
 
@@ -153,7 +153,7 @@ kubectl kustomize --enable-helm manifests/webserver-microgateway-config | kubect
 > 2. Then, delete and reapply the `BackendTLSPolicy` manually.
 
 ```bash
-kubectl delete pod -n airlock-microgateway-system $(kubectl get pods -n airlock-microgateway-system -o name | grep airlock-microgateway-operator-)
+kubectl -n airlock-microgateway-system delete $(kubectl get pods -n airlock-microgateway-system -o name | grep airlock-microgateway-operator-)
 
 kubectl delete -n oidc backendtlspolicies.gateway.networking.k8s.io webserver-tls && kubectl apply -f manifests/webserver-microgateway-config/backendtlspolicy.yaml
 ```

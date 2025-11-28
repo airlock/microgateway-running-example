@@ -4,8 +4,12 @@ kind: Kustomization
 namespace: nextcloud
 
 resources:
-- contentsecurity.yaml
+- sessionstore/
+- contentsecuritypolicy.yaml
 - denyrule.yaml
+- gateway.yaml
+- gatewayparameters.yaml
 - headerrewrites.yaml
+- httproute.yaml
+- ingress.yaml
 - limits.yaml
-- sidecargateway.yaml

@@ -1,0 +1,16 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- cert-manager
+- ca
+- redis-sessionstore/overlays/k8s
+- logging-and-reporting/overlays/k8s
+- airlock-microgateway/overlays/k8s
+- nextcloud
+- juice-shop
+- nextcloud-microgateway-config
+- juice-shop-microgateway-config
+- webserver
+- webserver-microgateway-config

@@ -30,17 +30,32 @@ For a list of all features, view the [comparison of the community and premium ed
 
 This repository includes hands-on examples to help you deploy and use Airlock Microgateway in real-world scenarios:
 
-- [`general/`](./README-k8s.md): Prepare the environment with required licensing, and tooling used by all examples.
-- [`general-openshift`](./README-openshift.md): Based on Red Hat OpenShift
-- [`web-protect/`](./scenarios/README-webprotect.md): Secure your web application against threats.
-- [`oidc/`](./scenarios/README-oidc.md): Integrate upfront authentication and access control using OIDC.
+- [`README-k8s `](./README-k8s.md): Prepare the environment with required licensing, and tooling used by all examples.
+- [`README-openshift`](./README-openshift.md): Based on Red Hat OpenShift
+- [`README-webprotect`](./scenarios/README-webprotect.md): Secure your web application against threats.
+- [`README-oidc`](./scenarios/README-oidc.md): Integrate upfront authentication and access control using OIDC.
 
-## 🏁 Quick Start
+## 🏁 Quick Start (K8s only)
 
-1. Start with the [General Setup](./general) to install the Microgateway and supporting components.
-2. Continue with the example of your choice:
-   - [Web Protection](./web-protect)
-   - [OIDC Authentication](./oidc)
+1. Deploy the license:
+
+```bash
+kubectl create ns airlock-microgateway-system --dry-run=client -o yaml | kubectl apply -f -
+
+kubectl -n airlock-microgateway-system create secret generic airlock-microgateway-license --from-file=microgateway-license.txt --dry-run=client -o yaml | kubectl apply -f -
+```
+
+2. Apply the GatewayAPI CRDs:
+
+```bash
+kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/standard-install.yaml
+```
+
+3. Apply the everything at once:
+
+```bash
+kubectl kustomize --enable-helm manifests | kubectl apply --server-side -f -
+```
 
 ---
 

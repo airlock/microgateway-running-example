@@ -1,7 +1,7 @@
 apiVersion: microgateway.airlock.com/v1alpha1
 kind: Limits
 metadata:
-  name: limits-nextcloud
+  name: nextcloud
 spec:
   settings:
     threatHandlingMode: Block

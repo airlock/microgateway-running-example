@@ -1,0 +1,37 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: nextcloud
+  namespace: nextcloud
+spec:
+  hostnames:
+  - "nextcloud-127-0-0-1.nip.io"
+  parentRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: airlock-nextcloud-gateway
+    namespace: nextcloud
+    sectionName: http
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /remote.php/dav/files/
+    timeouts:
+      request: 240s
+      backendRequest: 240s
+    backendRefs:
+    - name: nextcloud
+      namespace: nextcloud
+      kind: Service
+      port: 8080
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: nextcloud
+      namespace: nextcloud
+      kind: Service
+      port: 8080

@@ -1,5 +1,7 @@
 ---
 operator:
+  sidecarGateway:
+    enabled: false
   gatewayAPI:
     enabled: true
     podMonitor:
