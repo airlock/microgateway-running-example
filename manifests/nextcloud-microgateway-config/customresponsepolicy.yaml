@@ -1,0 +1,47 @@
+apiVersion: microgateway.airlock.com/v1alpha1
+kind: CustomResponsePolicy
+metadata:
+  name: nextcloud-response-policy
+  namespace: nextcloud
+spec:
+  targetRefs:
+  - group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    name: nextcloud
+  policies:
+    local:
+    # Customize all local error responses for other requests
+    - responses:
+      - statusCodeCondition:
+          matcher:
+            range:
+              start: 400
+              end: 499
+        customResponseRef:
+          name: nextcloud-response
+      #- statusCodeCondition:
+      #    matcher:
+      #      range:
+      #        start: 500
+      #        end: 599
+      #  customResponseRef:
+      #    name: sad-500
+    upstream:
+    # Replace all other upstream error responses
+    - responses:
+      - responseConditions:
+          statusCode:
+            matcher:
+              range:
+                start: 400
+                end: 499
+        customResponseRef:
+          name: nextcloud-response # upstream-4xx
+      #- responseConditions:
+      #    statusCode:
+      #      matcher:
+      #        range:
+      #          start: 500
+      #          end: 599
+      #  customResponseRef:
+      #    name: upstream-5xx
