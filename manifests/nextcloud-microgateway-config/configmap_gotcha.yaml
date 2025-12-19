@@ -127,7 +127,7 @@ data:
           border-radius: 999px;
           background: rgba(255,255,255,0.08);
           border: 1px solid rgba(255,255,255,0.12);
-          color: rgba(255,255,255,0.80);
+          color: rgba(255,255,0,0.80);
           font-size: 12px;
           letter-spacing: 0.2px;
           user-select: none;
@@ -225,7 +225,7 @@ data:
         <section class="card" aria-label="Error page">
           <div class="topbar" aria-hidden="true">
             <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-            <span>Intercepted request</span>
+            <span>Blocked request</span>
           </div>
 
           <div class="content">
