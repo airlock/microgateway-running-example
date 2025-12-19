@@ -150,7 +150,6 @@ data:
           font-size: 13px;
           letter-spacing: 0.25px;
           overflow: auto;
-          margin: 0 0 18px;
         }
 
         .art {
@@ -192,7 +191,7 @@ data:
           gap: 12px;
           flex-wrap: wrap;
           color: rgba(255,255,255,0.55);
-          font-size: 14px;
+          font-size: 12px;
         }
 
         .pill {
@@ -205,16 +204,12 @@ data:
           border: 1px solid rgba(255,255,255,0.10);
         }
 
-        .mgw {
-          width: 40px;
-          height: 40px;
+        .spark {
+          width: 10px;
+          height: 10px;
           border-radius: 999px;
-
-          /* Base64 PNG icon */
-          background-image: url("data:image/png;base64,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");
-          background-repeat: no-repeat;
-          background-position: center;
-          background-size: contain;
+          background: linear-gradient(135deg, var(--accent), var(--accent2));
+          box-shadow: 0 0 18px rgba(124,58,237,0.45);
         }
       </style>
     </head>
@@ -235,14 +230,13 @@ data:
                 Your request didn&apos;t make it through. If you believe this is a mistake, share the Request ID with support.
               </p>
 
-              <div class="rid">Request ID: %STREAM_ID%</div>
-
               <div class="badgeRow" aria-hidden="true">
                 <span class="badge"><b>Status</b> blocked</span>
                 <span class="badge"><b>Signal</b> suspicious pattern</span>
-                <!-- <span class="badge"><b>Action</b> denied</span> -->
+                <span class="badge"><b>Action</b> denied</span>
               </div>
 
+              <div class="rid">Request ID: %STREAM_ID%</div>
             </div>
 
             <div class="art" aria-label="Gotcha image">
@@ -251,7 +245,7 @@ data:
           </div>
 
           <div class="footer">
-            <span class="pill"><span class="mgw"></span> Airlock Error Page</span>
+            <span class="pill"><span class="spark"></span> Airlock Error Page</span>
             <span class="pill">Timestamp: <script>document.write(new Date().toISOString());</script></span>
           </div>
         </section>
