@@ -48,7 +48,7 @@ kubectl -n airlock-microgateway-system create secret generic airlock-microgatewa
 2. Apply the GatewayAPI CRDs:
 
 ```bash
-kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/standard-install.yaml
+kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.1/standard-install.yaml
 ```
 
 3. Apply the everything at once:

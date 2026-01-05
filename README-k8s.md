@@ -100,7 +100,7 @@ kubectl -n monitoring rollout status deployment,daemonset,statefulset
 In order to be able to use GatewayAPI you have to deploy the CRDs in advance.
 
 ```bash
-kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/standard-install.yaml
+kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.1/standard-install.yaml
 ```
 
 ## 🚀 Deploy Airlock Microgateway
