@@ -4,9 +4,11 @@ kind: Kustomization
 namespace: juice-shop
 
 resources:
+- configmap_juice_error_upstream.yaml
 - configmap_juice_error.yaml
 - contentsecuritypolicy.yaml
 - customresponse.yaml
+- customresponse_upstream.yaml
 - customresponsepolicy.yaml
 - denyrule.yaml
 - headerrewrites.yaml

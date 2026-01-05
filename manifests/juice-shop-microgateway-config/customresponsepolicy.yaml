@@ -18,7 +18,7 @@ spec:
               start: 400
               end: 499
         customResponseRef:
-          name: juice-response
+          name: juice-response # to see it access http://juice-shop-127-0-0-1.nip.io:8080/ftp/package.json.bak
       #- statusCodeCondition:
       #    matcher:
       #      range:
@@ -36,7 +36,7 @@ spec:
                 start: 400
                 end: 499
         customResponseRef:
-          name: juice-response # upstream-4xx
+          name: juice-response-upstream # To see it accesss http://juice-shop-127-0-0-1.nip.io:8080/ftp/suspicious_errors.yml
       #- responseConditions:
       #    statusCode:
       #      matcher:
