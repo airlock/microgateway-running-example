@@ -17,3 +17,5 @@ spec:
         name: nextcloud
     limitsRef:
       name: nextcloud
+    parserRef:
+      name: nextcloud

@@ -16,3 +16,4 @@ resources:
 - httproute.yaml
 - ingress.yaml
 - limits.yaml
+- parser.yaml

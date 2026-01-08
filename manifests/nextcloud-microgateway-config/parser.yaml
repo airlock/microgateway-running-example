@@ -1,0 +1,33 @@
+apiVersion: microgateway.airlock.com/v1alpha1
+kind: Parser
+metadata:
+  name: nextcloud
+  namespace: nextcloud
+spec:
+  request:
+    parsers:
+      json:
+        enable: true
+        mediaTypePattern: ".*json.*"
+      form:
+        enable: true
+        mediaTypePattern: ".*urlencoded.*"
+      multipart:
+        enable: true
+        mediaTypePattern: ".*multipart.*"
+    defaultContentType: "application/x-www-form-urlencoded"
+    custom:
+      rules:
+      - requestConditions:
+          # needed due to wrong encoding (https://github.com/nextcloud/desktop/issues/8612)
+          method:
+          - PUT
+          path:
+            matcher:
+              prefix: /remote.php/dav/uploads/
+          mediaType:
+            matcher:
+              regex: '.*application/x-www-form-urlencoded.*'
+        action:
+          # Do not parse the request body at all (prevents UTF-8/form parsing errors on binary uploads)
+          skip: {}
