@@ -20,30 +20,23 @@ spec:
 
         ruleKeys:
         - SQL
-      # Exclude any path segment with value ".gitignore" for IDOR
+      # Exclude any suffix with value ".gitignore" for IDOR 
+      # !!! this is not recommended and just an example!!!
+      # It would be better to not sync git files at all and exclude them from uploading.
       - blockedData:
-          pathSegment:
-            value:
-              matcher:
-                exact: .gitignore
+          path:
+            matcher:
+              suffix: .gitignore
         ruleKeys:
         - IDOR
 
-      # Exclude common media/subtitle file types from SQL rule
+      # Exclude common media/subtitle file types from SQL and NOSQL rule
       - blockedData:
-          pathSegment:
-            value:
-              matcher:
-                regex: ".*\\.(?i)(mp4|srt|sub|vtt|avi|mkv|mov)$"
+          path:
+            matcher:
+              regex: ".*\\.(?i)(mp4|srt|sub|vtt|avi|mkv|mov)$"
         ruleKeys:
         - SQL
-
-      # Same for NOSQL rule
-      - blockedData:
-          pathSegment:
-            value:
-              matcher:
-                regex: ".*\\.(?i)(mp4|srt|sub|vtt|avi|mkv|mov)$"
-        ruleKeys:
         - NOSQL
+
     custom: {}

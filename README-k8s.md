@@ -54,6 +54,14 @@ kubectl create ns airlock-microgateway-system --dry-run=client -o yaml | kubectl
 kubectl -n airlock-microgateway-system create secret generic airlock-microgateway-license --from-file=microgateway-license.txt --dry-run=client -o yaml | kubectl apply -f -
 ```
 
+## 🧩 Deploy GatewayAPI CRDs
+
+In order to be able to use GatewayAPI you have to deploy the CRDs in advance.
+
+```bash
+kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.1/standard-install.yaml
+```
+
 ## 📜 Deploy Cert-Manager
 
 For an easy start in non-production environments, you may deploy the same [cert-manager](https://cert-manager.io/) we are using internally for testing.
@@ -95,13 +103,6 @@ kubectl -n monitoring rollout status deployment,daemonset,statefulset
 > * Prometheus via http://prometheus-127-0-0-1.nip.io/
 > * Grafana via http://grafana-127-0-0-1.nip.io/
 
-## 🧩 Deploy GatewayAPI CRDs
-
-In order to be able to use GatewayAPI you have to deploy the CRDs in advance.
-
-```bash
-kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/standard-install.yaml
-```
 
 ## 🚀 Deploy Airlock Microgateway
 

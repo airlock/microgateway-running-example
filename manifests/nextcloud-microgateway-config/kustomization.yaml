@@ -6,6 +6,9 @@ namespace: nextcloud
 resources:
 - sessionstore/
 - contentsecuritypolicy.yaml
+- customresponse.yaml
+- customresponsepolicy.yaml
+- configmap_gotcha.yaml
 - denyrule.yaml
 - gateway.yaml
 - gatewayparameters.yaml
@@ -13,3 +16,4 @@ resources:
 - httproute.yaml
 - ingress.yaml
 - limits.yaml
+- parser.yaml

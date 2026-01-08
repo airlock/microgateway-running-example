@@ -1,0 +1,17 @@
+apiVersion: microgateway.airlock.com/v1alpha1
+kind: CustomResponse
+metadata:
+  name: nextcloud-response
+  namespace: nextcloud
+spec:
+  # replace status code with 400 when this custom response is served
+  statusCode: 400
+
+  # provide error responses for HTML
+  content:
+  - contentType: text/html
+    body:
+      valueFrom:
+        configMapKeyRef:
+          name: gotcha-400
+          key: gotcha_400.html

@@ -1,0 +1,47 @@
+apiVersion: microgateway.airlock.com/v1alpha1
+kind: CustomResponsePolicy
+metadata:
+  name: juice-response-policy
+  namespace: juice-shop
+spec:
+  targetRefs:
+  - group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    name: juice-shop
+  policies:
+    local:
+    # Customize all local error responses for other requests
+    - responses:
+      - statusCodeCondition:
+          matcher:
+            range:
+              start: 400
+              end: 499
+        customResponseRef:
+          name: juice-response # to see it access http://juice-shop-127-0-0-1.nip.io:8080/ftp/package.json.bak
+      #- statusCodeCondition:
+      #    matcher:
+      #      range:
+      #        start: 500
+      #        end: 599
+      #  customResponseRef:
+      #    name: sad-500
+    upstream:
+    # Replace all other upstream error responses
+    - responses:
+      - responseConditions:
+          statusCode:
+            matcher:
+              range:
+                start: 400
+                end: 499
+        customResponseRef:
+          name: juice-response-upstream # To see it accesss http://juice-shop-127-0-0-1.nip.io:8080/ftp/suspicious_errors.yml
+      #- responseConditions:
+      #    statusCode:
+      #      matcher:
+      #        range:
+      #          start: 500
+      #          end: 599
+      #  customResponseRef:
+      #    name: upstream-5xx

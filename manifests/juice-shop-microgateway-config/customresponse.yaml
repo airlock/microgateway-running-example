@@ -1,0 +1,21 @@
+apiVersion: microgateway.airlock.com/v1alpha1
+kind: CustomResponse
+metadata:
+  name: juice-response
+  namespace: juice-shop
+spec:
+  # replace status code with 400 when this custom response is served
+  statusCode: 400
+
+  # provide error responses for HTML
+  content:
+  - contentType: text/html
+    body:
+      valueFrom:
+        configMapKeyRef:
+          name: juice-400
+          key: juice_400.html
+  - contentType: text/plain
+    body:
+      value: |-
+        "Bad Request Request ID: %STREAM_ID%"

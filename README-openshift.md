@@ -171,7 +171,7 @@ oc adm policy add-scc-to-user privileged -z alloy -n monitoring
 If you have an OpenShift version <= 4.18 please install the GatewayAPI CRDs manually.
 
 ```bash
-kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/standard-install.yaml
+kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.1/standard-install.yaml
 ```
 
 ### Airlock Microgateway configure the after it was installed via OperatorHub
