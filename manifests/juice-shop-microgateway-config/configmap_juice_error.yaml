@@ -287,7 +287,7 @@ data:
         <section class="panel" role="region" aria-label="Blocked request">
 
           <div class="callout" role="note" aria-label="Security notice">
-            <h1>Your request was blocked by Kubert</h1>
+            <h1>Your request was blocked by Airbert</h1>
             <span class="note">This request was stopped before it reached the application.</span>
           </div>
 

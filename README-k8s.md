@@ -28,7 +28,8 @@ This guide provides the foundational setup required for running Airlock Microgat
 Make sure the following tools are installed:
 
 - [`kubectl`](https://kubernetes.io/docs/reference/kubectl/overview/)
-- [`helm`](https://helm.sh/docs/intro/install/)
+- [`helm Version 3`](https://helm.sh/docs/intro/install/)
+- > ⚠️ helm 4 does currently not work with Kustomize due to an [issue](https://github.com/kubernetes-sigs/kustomize/issues/6013)!
 - [`kustomize`](https://kustomize.io) (version ≥ 5.2.1)
 - A running **Kubernetes cluster** with an **Ingress API Controller** (e.g. Traefik, Ingress NGINX)
 
@@ -102,7 +103,6 @@ kubectl -n monitoring rollout status deployment,daemonset,statefulset
 >
 > * Prometheus via http://prometheus-127-0-0-1.nip.io/
 > * Grafana via http://grafana-127-0-0-1.nip.io/
-
 
 ## 🚀 Deploy Airlock Microgateway
 
