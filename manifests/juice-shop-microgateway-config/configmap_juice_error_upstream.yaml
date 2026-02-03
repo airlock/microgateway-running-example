@@ -288,7 +288,7 @@ data:
 
             <div class="callout" role="note" aria-label="Security notice">
               <h1>It wasn´t me</h1>
-              <span class="note">This request was not stopped by Kubert! The Webserver send an error.</span>
+              <span class="note">This request was not stopped by Airbert! The Webserver send an error.</span>
             </div>
 
             <div class="field" aria-label="Request ID">
