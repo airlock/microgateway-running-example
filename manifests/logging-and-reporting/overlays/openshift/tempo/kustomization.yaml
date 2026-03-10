@@ -8,5 +8,5 @@ helmCharts:
     releaseName: tempo
     namespace: monitoring
     repo: https://grafana.github.io/helm-charts
-    version: 1.23.3
+    version: 1.24.4
     valuesFile: values.yaml
