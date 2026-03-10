@@ -8,6 +8,7 @@ data:
     apiVersion: 1
     datasources:
     - name: loki
+      uid: loki
       type: loki
       url: http://loki-gateway/
       access: proxy
@@ -15,7 +16,18 @@ data:
       isDefault: true
       jsonData:
         maxLines: 1000
+    - name: tempo
+      uid: tempo
+      type: tempo
+      url: http://tempo:3200
+      access: proxy
+      isDefault: false
+      jsonData:
+        httpMethod: GET
+        serviceMap:
+          datasourceUid: prometheus
     - name: Prometheus
+      uid: prometheus
       type: prometheus
       access: proxy
       url: https://thanos-querier.openshift-monitoring.svc:9091

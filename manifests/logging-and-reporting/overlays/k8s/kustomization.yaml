@@ -6,3 +6,4 @@ resources:
 - ../../base
 - loki
 - kube-prometheus-stack
+- tempo

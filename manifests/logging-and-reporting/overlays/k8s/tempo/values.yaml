@@ -1,0 +1,18 @@
+---
+tempo:
+  metricsGenerator:
+    enabled: true
+    remoteWriteUrl: "http://kube-prometheus-stack-prometheus.monitoring.svc:9090/api/v1/write"
+
+  overrides:
+    defaults:
+      metrics_generator:
+        processors:
+        - service-graphs
+        - span-metrics
+        - local-blocks
+
+serviceMonitor:
+  enabled: true
+  additionalLabels:
+    release: kube-prometheus-stack

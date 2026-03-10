@@ -30,19 +30,36 @@ datasources:
   datasources.yaml:
     apiVersion: 1
     datasources:
-    - name: loki
+    - name: Loki
+      uid: loki
       type: loki
       url: http://loki-gateway/
       access: proxy
       version: 1
       isDefault: true
       jsonData:
-        maxLines: 1000
-    - name: prometheus
+        maxLines: 5000
+        derivedFields:
+        - name: trace_id
+          matcherRegex: trace_id=(\w+)
+          datasourceUid: tempo
+          url: $${__value.raw}
+    - name: Prometheus
+      uid: prometheus
       type: prometheus
       url: http://kube-prometheus-stack-prometheus:9090/
       access: proxy
       isDefault: false
+    - name: Tempo
+      uid: tempo
+      type: tempo
+      url: http://tempo:3200
+      access: proxy
+      isDefault: false
+      jsonData:
+        httpMethod: GET
+        serviceMap:
+          datasourceUid: prometheus
 
 env:
   GF_AUTH_ANONYMOUS_ENABLED: true
