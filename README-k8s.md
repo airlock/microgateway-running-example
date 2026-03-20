@@ -16,6 +16,7 @@ This guide provides the foundational setup required for running Airlock Microgat
 - **Airlock Microgateway** – Data plane security
 - **Prometheus & Grafana** – Metrics and dashboards
 - **Loki & Alloy** – Log aggregation and analysis
+- **Tempo** – Distributed tracing backend
 
 ---
 
@@ -30,6 +31,7 @@ Make sure the following tools are installed:
 - [`kubectl`](https://kubernetes.io/docs/reference/kubectl/overview/)
 - [`helm Version 3`](https://helm.sh/docs/intro/install/)
 - > ⚠️ helm 4 does currently not work with Kustomize due to an [issue](https://github.com/kubernetes-sigs/kustomize/issues/6013)!
+
 - [`kustomize`](https://kustomize.io) (version ≥ 5.2.1)
 - A running **Kubernetes cluster** with an **Ingress API Controller** (e.g. Traefik, Ingress NGINX)
 
@@ -60,7 +62,7 @@ kubectl -n airlock-microgateway-system create secret generic airlock-microgatewa
 In order to be able to use GatewayAPI you have to deploy the CRDs in advance.
 
 ```bash
-kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.1/standard-install.yaml
+kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.0/standard-install.yaml
 ```
 
 ## 📜 Deploy Cert-Manager
@@ -94,7 +96,7 @@ kubectl -n redis rollout status deployment
 ```bash
 kubectl kustomize --enable-helm manifests/logging-and-reporting/overlays/k8s | kubectl apply --server-side -f -
 
-# Wait until Alloy, Loki, Prometheus and Grafana are up and running
+# Wait until Alloy, Loki, Tempo, Prometheus and Grafana are up and running
 kubectl -n monitoring rollout status deployment,daemonset,statefulset
 ```
 
@@ -103,6 +105,8 @@ kubectl -n monitoring rollout status deployment,daemonset,statefulset
 >
 > * Prometheus via http://prometheus-127-0-0-1.nip.io/
 > * Grafana via http://grafana-127-0-0-1.nip.io/
+>
+> Tempo OTLP endpoints are available in-cluster on `tempo.monitoring.svc.cluster.local:55680` (gRPC, OTLP legacy) and `tempo.monitoring.svc.cluster.local:55681` (HTTP, OTLP legacy).
 
 ## 🚀 Deploy Airlock Microgateway
 

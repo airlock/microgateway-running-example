@@ -4,10 +4,9 @@ kind: Kustomization
 namespace: monitoring
 
 helmCharts:
-  - name: loki
-    releaseName: loki
+  - name: tempo
+    releaseName: tempo
     namespace: monitoring
     repo: https://grafana.github.io/helm-charts
-    version: 6.55.0
-    includeCRDs: true
+    version: 1.24.4
     valuesFile: values.yaml

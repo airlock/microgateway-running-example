@@ -19,3 +19,5 @@ spec:
   defaults:
     sessionHandlingRef:
       name: sessionagent
+    telemetryRef:
+      name: gateway-telemetry

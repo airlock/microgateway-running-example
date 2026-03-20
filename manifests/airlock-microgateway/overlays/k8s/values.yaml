@@ -1,0 +1,18 @@
+---
+config:
+  # Configures PodMonitor resources for Gateway Pods.
+  gatewayPodMonitor:
+    create: true
+    labels:
+      release: "kube-prometheus-stack"
+
+# Configures the generation of a Prometheus Operator ServiceMonitor.
+serviceMonitor:
+  create: true
+  labels:
+    release: "kube-prometheus-stack"
+
+# Creates dashboards in the form of ConfigMaps that can be imported
+# by Grafana using its sidecar setup.
+dashboards:
+  create: true

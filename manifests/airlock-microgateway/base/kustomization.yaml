@@ -8,3 +8,4 @@ resources:
 - gateway.yaml
 - gatewayparameters.yaml
 - namespace.yaml
+- telemetry.yaml

@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
 - ../../base
 - prometheus
+- tempo
 
 patches:
 - path: patches/patch-replace-datasources.yaml

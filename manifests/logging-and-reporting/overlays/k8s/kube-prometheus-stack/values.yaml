@@ -47,6 +47,7 @@ prometheusOperator:
 prometheus:
   enabled: true
   prometheusSpec:
+    enableRemoteWriteReceiver: true
     podMonitorSelectorNilUsesHelmValues: false
     serviceMonitorSelectorNilUsesHelmValues: false
     maximumStartupDurationSeconds: 300
