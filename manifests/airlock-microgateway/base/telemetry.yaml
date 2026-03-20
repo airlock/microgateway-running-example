@@ -11,10 +11,6 @@ spec:
         sampling:
           strategy:
             always: {}
-          #strategy:
-          #  inheritParentDecision:
-          #    fallbackStrategy:
-          #      always: {}
         exporter:
           grpcEndpoint:
             uri: "http://tempo.monitoring.svc.cluster.local:4317"
