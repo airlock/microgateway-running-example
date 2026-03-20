@@ -1,0 +1,20 @@
+apiVersion: microgateway.airlock.com/v1alpha1
+kind: Telemetry
+metadata:
+  name: gateway-telemetry
+  namespace: airlock-gateway
+spec:
+  tracing:
+    provider:
+      openTelemetry:
+        serviceName: "gateway-telemetry"
+        sampling:
+          strategy:
+            always: {}
+          #strategy:
+          #  inheritParentDecision:
+          #    fallbackStrategy:
+          #      always: {}
+        exporter:
+          grpcEndpoint:
+            uri: "http://tempo.monitoring.svc.cluster.local:4317"
