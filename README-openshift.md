@@ -82,7 +82,7 @@ oc adm policy add-cluster-role-to-user cluster-monitoring-view \
 ### Replace the example token with your own Token  in the Grafana values.yaml and reapply Grafana
 
 ```bash
-oc create token grafana -n monitoring --duration=87600h > grafana-token.txt #valid for 10 years
+oc create token grafana -n monitoring --duration=2160h > grafana-token.txt #valid for 3 months
 
 cat grafana-token.txt 
 
