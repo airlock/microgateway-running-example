@@ -10,6 +10,6 @@ helmCharts:
   releaseName: airlock-microgateway
   namespace: airlock-microgateway-system
   repo: oci://quay.io/airlockcharts
-  version: 5.0.3
+  version: 5.1.1
   valuesFile: values.yaml
   includeCRDs: true
