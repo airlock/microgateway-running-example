@@ -17,7 +17,9 @@ spec:
       engineContainer: {}
       automountServiceAccountToken: false
   defaults:
+    contentSecurity:
+      secured: {} # Enables WAAP processing in general with the default configuration of filter and mutation rules.
     sessionHandlingRef:
-      name: sessionagent
+      name: sessionagent # This configures the session management via Redis of the gateway
     telemetryRef:
-      name: gateway-telemetry
+      name: gateway-telemetry # This configures the telemetry streaming of the gateway
