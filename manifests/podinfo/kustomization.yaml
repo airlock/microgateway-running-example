@@ -12,12 +12,12 @@ resources:
 helmCharts:
   - name: podinfo
     repo: https://stefanprodan.github.io/podinfo
-    version: 6.12.0
+    version: 6.14.0
     releaseName: podinfo
     valuesFile: values.yaml
   - name: podinfo
     repo: https://stefanprodan.github.io/podinfo
-    version: 6.12.0
+    version: 6.14.0
     releaseName: podinfo-slow
     valuesFile: values-slow.yaml
 
