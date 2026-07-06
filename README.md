@@ -30,15 +30,15 @@ For a list of all features, view the [comparison of the community and premium ed
 
 This repository includes hands-on examples to help you deploy and use Airlock Microgateway in real-world scenarios:
 
-- [`README-k8s `](./README-k8s.md): Prepare the environment with required licensing, and tooling used by all examples.
+- [`README-k8s `](./README-k8s.md): Prepare the environment with tooling used by all examples (licensing is optional, only required for authentication and security functionalities).
 - [`README-openshift`](./README-openshift.md): Based on Red Hat OpenShift
-- [`README-webprotect`](./scenarios/README-webprotect.md): Secure your web application against threats.
-- [`README-oidc`](./scenarios/README-oidc.md): Integrate upfront authentication and access control using OIDC.
+- [`README-webprotect`](./scenarios/README-webprotect.md): Secure your web application against threats (Filtering license required).
+- [`README-oidc`](./scenarios/README-oidc.md): Integrate upfront authentication and access control using OIDC (Auth license required).
 - [`README-trace`](./scenarios/README-trace.md): Track and visualize request flows to your microservices using OpenTelemetry distributed tracing.
 
 ## 🏁 Quick Start (K8s only)
 
-1. Deploy the license:
+1. Deploy the license (optional; only required for authentication and security functionalities):
 
 ```bash
 kubectl create ns airlock-microgateway-system --dry-run=client -o yaml | kubectl apply -f -
@@ -66,4 +66,4 @@ Source code for the examples is provided under the [MIT License](./LICENSE). Com
 
 ## Disclaimer
 
-Airlock Microgateway is available as community and premium editions. See [Community vs. Premium editions in detail](https://docs.airlock.com/microgateway/latest/#data/1675772882054.html) to choose the right license type. Anyway, this example setup can be deployed with both editions of Airlock Microgateway.
+Airlock Microgateway is available as community and premium editions. A license is no longer needed for basic usage; it is only required for authentication and security functionalities. See [Community vs. Premium editions in detail](https://docs.airlock.com/microgateway/latest/#data/1675772882054.html) to choose the right license type. Anyway, this example setup can be deployed with both editions of Airlock Microgateway.

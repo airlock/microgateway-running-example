@@ -4,7 +4,7 @@
   <img src="https://raw.githubusercontent.com/airlock/microgateway/main/media/Microgateway_Labeled_AlignRight.svg" alt="Microgateway Logo" width="250">
 </p>
 
-This guide provides the foundational setup required for running Airlock Microgateway examples within the Red Hat OpenShift environment. It includes all general steps like licensing, infrastructure setup, logging, monitoring, and installing the Microgateway.
+This guide provides the foundational setup required for running Airlock Microgateway examples within the Red Hat OpenShift environment. It includes all general steps like infrastructure setup, logging, monitoring, and installing the Microgateway (licensing is optional and only required for authentication and security functionalities).
 
 ---
 
@@ -27,9 +27,9 @@ This guide provides the foundational setup required for running Airlock Microgat
 
 ---
 
-## 🛡️ Install License
+## 🛡️ Install License (Optional)
 
-📝 You must obtain a valid license before continuing:
+📝 A license is no longer needed for basic usage. It is only required if you want to use authentication and security functionalities. If needed, you must obtain a valid license before continuing:
 
 - **Community License**: [airlock.com/microgateway-community](https://airlock.com/en/microgateway-community)
 - **Premium License**: [airlock.com/microgateway-premium](https://airlock.com/en/microgateway-premium)
