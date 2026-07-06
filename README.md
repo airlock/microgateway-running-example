@@ -21,6 +21,7 @@ Airlock Microgateway is the perfect fit for these requirements, as it is optimiz
 - **Frictionless DevSecOps Process**: Streamlines technical and business process integration, enabling secure and agile development through Shift-Left and GitOps based controls.
 - **Enables Hybrid Cloud Strategy**: Supports platform engineering across hybrid and multi-cloud environments, easing governance and aligning with Kubernetes-based infrastructure best practices.
 - **Interoperability by Design**: Built on open standards like [Kuberentes Gateway API](https://gateway-api.sigs.k8s.io), [OIDC](https://openid.net), [JWT](https://jwt.io) and proven technologies such as [Elastic Common Schema](https://www.elastic.co/docs/reference/ecs), [Prometheus](https://prometheus.io), [Grafana](https://grafana.com), [Red Hat OpenShift](https://www.redhat.com/en/technologies/cloud-computing/openshift), [Rancher](https://www.rancher.com) to ensures flexibility, avoid vendor lock-in, and supports migration across platforms.
+- **Free Basic Gateway API**: No license is required for basic Gateway API features. It can be used as a data plane for free.
 
 For a list of all features, view the [comparison of the community and premium edition](https://docs.airlock.com/microgateway/latest/?topic=MGW-00000056).
 
@@ -32,8 +33,8 @@ This repository includes hands-on examples to help you deploy and use Airlock Mi
 
 - [`README-k8s `](./README-k8s.md): Prepare the environment with tooling used by all examples (licensing is optional, only required for authentication and security functionalities).
 - [`README-openshift`](./README-openshift.md): Based on Red Hat OpenShift
-- [`README-webprotect`](./scenarios/README-webprotect.md): Secure your web application against threats (Filtering license required).
-- [`README-oidc`](./scenarios/README-oidc.md): Integrate upfront authentication and access control using OIDC (Auth license required).
+- [`README-webprotect`](./scenarios/README-webprotect.md): Secure your web application against threats ⚠️ **(Filtering license required)**.
+- [`README-oidc`](./scenarios/README-oidc.md): Integrate upfront authentication and access control using OIDC ⚠️ **(Auth license required)**.
 - [`README-trace`](./scenarios/README-trace.md): Track and visualize request flows to your microservices using OpenTelemetry distributed tracing.
 
 ## 🏁 Quick Start (K8s only)
