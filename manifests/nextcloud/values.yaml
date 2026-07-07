@@ -1,4 +1,10 @@
 ---
+internalDatabase:
+  enabled: false
+
+externalDatabase:
+  enabled: true
+
 mariadb:
   enabled: true
 

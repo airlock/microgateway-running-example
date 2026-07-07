@@ -65,12 +65,12 @@ In order to be able to use GatewayAPI you have to deploy the CRDs in advance.
 
 ```bash
 # No Gateway API CRDs or not managed via HELM
-kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.1/standard-install.yaml
+kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.6.0/standard-install.yaml
 ```
 
 ```bash
 # Gateway API predeployed by different HELM package like Traefik in Rancher Desktop
-kubectl apply --server-side --force-conflicts -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.1/standard-install.yaml
+kubectl apply --server-side --force-conflicts -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.6.0/standard-install.yaml
 ```
 
 ## 📜 Deploy Cert-Manager
@@ -114,10 +114,12 @@ kubectl -n monitoring rollout status deployment,daemonset,statefulset
 > * Prometheus via http://prometheus-127-0-0-1.nip.io/
 > * Grafana via http://grafana-127-0-0-1.nip.io/
 >
-> Alloy endpoints are available in-cluster on `alloy.monitoring.svc.cluster.local` 
+> Alloy endpoints are available in-cluster on `alloy.monitoring.svc.cluster.local`
+>
 > * OTLP: 4317 gRPC, 4318 HTTP
 >
-> Tempo endpoints are available in-cluster on `tempo.monitoring.svc.cluster.local` 
+> Tempo endpoints are available in-cluster on `tempo.monitoring.svc.cluster.local`
+>
 > * OTLP: 4317 gRPC, 4318 HTTP
 > * Jaeger: 14250 gRPC, 6832 binary, 6831 compact, 14268 HTTP.
 

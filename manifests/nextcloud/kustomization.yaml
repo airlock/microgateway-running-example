@@ -13,3 +13,36 @@ helmCharts:
     repo: https://nextcloud.github.io/helm/
     version: 9.2.0
     valuesFile: values.yaml
+
+patches: # Patches are needed until https://github.com/nextcloud/helm/pull/792 is fixed
+  - target:
+      kind: Deployment
+      name: nextcloud
+    patch: |-
+      - op: replace
+        path: /metadata/namespace
+        value: nextcloud
+
+  - target:
+      kind: Service
+      name: nextcloud
+    patch: |-
+      - op: replace
+        path: /metadata/namespace
+        value: nextcloud
+
+  - target:
+      kind: Secret
+      name: nextcloud
+    patch: |-
+      - op: replace
+        path: /metadata/namespace
+        value: nextcloud
+
+  - target:
+      kind: Secret
+      name: nextcloud-db
+    patch: |-
+      - op: replace
+        path: /metadata/namespace
+        value: nextcloud
