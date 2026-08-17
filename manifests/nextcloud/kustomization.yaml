@@ -11,7 +11,7 @@ helmCharts:
     releaseName: nextcloud
     namespace: nextcloud
     repo: https://nextcloud.github.io/helm/
-    version: 9.2.0
+    version: 9.2.5
     valuesFile: values.yaml
 
 patches: # Patches are needed until https://github.com/nextcloud/helm/pull/792 is fixed
