@@ -71,7 +71,7 @@ More details are available in our documentation [Gateway deployment](https://doc
 ---
 
 Before continuing, make sure your environment is prepared by following the instructions in the [General Kubernetes Setup](../README-k8s.md) or [General OpenShift Setup](../README-openshift.md).  
-This includes installing required tools, deploying observability components, certificate authorities, Redis, and the Airlock Microgateway itself.
+This includes installing required tools, deploying observability components, certificate authorities, Valkey, and the Airlock Microgateway itself.
 
 ## 🛠 Deploy the examples:
 

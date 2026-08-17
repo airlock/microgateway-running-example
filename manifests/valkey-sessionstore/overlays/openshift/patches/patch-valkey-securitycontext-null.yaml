@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: valkey
+spec:
+  template:
+    spec:
+      # Disable podSecurityContext
+      securityContext: null
+      # Disable containerSecurityContext for the 'valkey' container
+      containers:
+      - name: valkey
+        securityContext: null
+      # Disable containerSecurityContext for the 'valkey-init' init container
+      initContainers:
+      - name: valkey-init
+        securityContext: null

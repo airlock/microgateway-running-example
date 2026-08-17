@@ -41,7 +41,7 @@ Extend your secure deployment by integrating **authentication and authorization*
 ## 🧰 General Prerequisites
 
 Before continuing, make sure your environment is prepared by following the instructions in the [General Setup](../general).  
-This includes installing required tools, deploying observability components, certificate authorities, Redis, and the Airlock Microgateway itself.
+This includes installing required tools, deploying observability components, certificate authorities, Valkey, and the Airlock Microgateway itself.
 
 ## Entra ID Prerequisites
 

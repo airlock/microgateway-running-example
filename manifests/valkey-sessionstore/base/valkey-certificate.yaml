@@ -1,11 +1,11 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: redis-certificate
-  namespace: redis
+  name: valkey-certificate
+  namespace: valkey
 spec:
   dnsNames:
-  - redis-master.redis.svc.cluster.local
+  - valkey.valkey.svc.cluster.local
 
   privateKey:
     size: 4096
@@ -14,10 +14,10 @@ spec:
   - client auth
   - server auth
 
-  commonName: redis-master.redis.svc.cluster.local
+  commonName: valkey.valkey.svc.cluster.local
 
   issuerRef:
     kind: ClusterIssuer
     name: cluster-ca-issuer
 
-  secretName: redis-certificate
+  secretName: valkey-certificate

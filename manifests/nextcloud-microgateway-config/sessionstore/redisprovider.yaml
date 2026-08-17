@@ -1,5 +1,6 @@
 ---
 apiVersion: microgateway.airlock.com/v1alpha1
+# RedisProvider is also used for Valkey-compatible session stores.
 kind: RedisProvider
 metadata:
   name: sessionagent
@@ -7,7 +8,7 @@ metadata:
 spec:
   mode:
     standalone:
-      host: redis-master.redis.svc.cluster.local
+      host: valkey.valkey.svc.cluster.local
       port: 6379
   tls:
     certificateVerification:
@@ -19,8 +20,8 @@ spec:
               name: airlock-ca
     clientCertificate:
       secretRef:
-        name: redis-client-cert
+        name: valkey-client-cert
   auth:
     password:
       secretRef:
-        name: redis-password
+        name: valkey-password

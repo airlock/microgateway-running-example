@@ -1,0 +1,84 @@
+auth:
+  enabled: true
+  aclUsers:
+    default:
+      permissions: "~* &* +@all"
+      password: runningexample
+
+startupProbe:
+  enabled: true
+  customProbe:
+    exec:
+      command:
+      - valkey-cli
+      - --tls
+      - --cacert
+      - /tls/ca.crt
+      - --cert
+      - /tls/tls.crt
+      - --key
+      - /tls/tls.key
+      - --user
+      - default
+      - --pass
+      - runningexample
+      - ping
+    initialDelaySeconds: 1
+    periodSeconds: 1
+    timeoutSeconds: 1
+    failureThreshold: 3
+
+readinessProbe:
+  enabled: true
+  customProbe:
+    exec:
+      command:
+      - valkey-cli
+      - --tls
+      - --cacert
+      - /tls/ca.crt
+      - --cert
+      - /tls/tls.crt
+      - --key
+      - /tls/tls.key
+      - --user
+      - default
+      - --pass
+      - runningexample
+      - ping
+    initialDelaySeconds: 0
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+    successThreshold: 1
+
+livenessProbe:
+  enabled: true
+  customProbe:
+    exec:
+      command:
+      - valkey-cli
+      - --tls
+      - --cacert
+      - /tls/ca.crt
+      - --cert
+      - /tls/tls.crt
+      - --key
+      - /tls/tls.key
+      - --user
+      - default
+      - --pass
+      - runningexample
+      - ping
+    initialDelaySeconds: 0
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+
+tls:
+  enabled: true
+  existingSecret: valkey-certificate
+  serverPublicKey: tls.crt
+  serverKey: tls.key
+  caPublicKey: ca.crt
+  requireClientCertificate: true

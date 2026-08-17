@@ -4,7 +4,7 @@ namespace: airlock-gateway
 
 resources:
 - certificate-airlock-ca.yaml
-- redis-password-secret.yaml
+- valkey-password-secret.yaml
 - redisprovider.yaml
-- redis-client-cert.yaml
+- valkey-client-cert.yaml
 - sessionHandling.yaml

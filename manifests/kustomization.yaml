@@ -5,7 +5,7 @@ kind: Kustomization
 resources:
   - cert-manager
   - ca
-  - redis-sessionstore/overlays/k8s
+  - valkey-sessionstore/overlays/k8s
   - logging-and-reporting/overlays/k8s
   - airlock-microgateway/overlays/k8s
   - nextcloud

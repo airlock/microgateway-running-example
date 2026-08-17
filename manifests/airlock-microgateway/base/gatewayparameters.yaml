@@ -20,6 +20,6 @@ spec:
     contentSecurity:
       secured: {} # Enables WAAP processing in general with the default configuration of filter and mutation rules.
     sessionHandlingRef:
-      name: sessionagent # This configures the session management via Redis of the gateway
+      name: sessionagent # This configures the session management via Valkey for the gateway
     telemetryRef:
       name: gateway-telemetry # This configures the telemetry streaming of the gateway

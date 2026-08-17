@@ -90,13 +90,13 @@ kubectl -n cert-manager rollout status deployment
 kubectl kustomize --enable-helm manifests/ca | kubectl apply --server-side -f -
 ```
 
-## 🗄️ Deploy Redis (Session Store)
+## 🗄️ Deploy Valkey (Session Store)
 
 ```bash {"cwd":""}
-kubectl kustomize --enable-helm manifests/redis-sessionstore/overlays/k8s | kubectl apply --server-side -f -
+kubectl kustomize --enable-helm manifests/valkey-sessionstore/overlays/k8s | kubectl apply --server-side -f -
 
-# Wait until the Redis is up and running
-kubectl -n redis rollout status deployment
+# Wait until Valkey is up and running
+kubectl -n valkey rollout status deployment
 ```
 
 ## 📊 Deploy Logging and Monitoring Stack

@@ -5,5 +5,5 @@ kind: Kustomization
 resources:
 - ../../base
 
-patchesStrategicMerge:
-- patches/patch-redis-securitycontext-null.yaml
+patches:
+- path: patches/patch-valkey-securitycontext-null.yaml
