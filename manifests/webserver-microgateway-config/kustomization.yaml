@@ -7,12 +7,14 @@ resources:
 - backendtlspolicy.yaml
 - contentsecuritypolicy.yaml
 - denyrules.yaml
+- webserver-tls-cert.yaml
 - headerrewrites.yaml
 - httproute.yaml
 - identitypropagation-bearer-token.yaml
 - identitypropagation-email.yaml
 - identitypropagation-name.yaml
 - jwks.yaml
+- listenerset.yaml
 - oidc-client-password.yaml
 - oidcprovider.yaml
 - oidcrelyingparty.yaml

@@ -138,24 +138,11 @@ kubectl kustomize --enable-helm manifests/webserver | kubectl apply --server-sid
 kubectl -n oidc rollout status deployment webserver
 ```
 
-## Protect Webserver (data plane mode 'sidecarless')
+## Protect Webserver
 
 ```bash {"cwd":"../"}
 # Deploy the Airlock Microgateway configuration
 kubectl kustomize --enable-helm manifests/webserver-microgateway-config | kubectl apply --server-side -f -
-```
-
-> [!WARNING]
-> If Airlock Microgateway was already deployed and you switched the Gateway API standard to *experimental* (which is required for this example), you may encounter an "error 500".
-> To resolve this:
->
-> 1. Delete the Microgateway operator pods. They will restart automatically with the new *experimental* Gateway API CRDs.
-> 2. Then, delete and reapply the `BackendTLSPolicy` manually.
-
-```bash
-kubectl -n airlock-microgateway-system delete $(kubectl get pods -n airlock-microgateway-system -o name | grep airlock-microgateway-operator-)
-
-kubectl delete -n oidc backendtlspolicies.gateway.networking.k8s.io webserver-tls && kubectl apply -f manifests/webserver-microgateway-config/backendtlspolicy.yaml
 ```
 
 ## Adding Entra Data to Your Deployment

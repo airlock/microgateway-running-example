@@ -1,0 +1,25 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: ListenerSet
+metadata:
+  name: webserver
+  namespace: oidc
+spec:
+  parentRef:
+    group: gateway.networking.k8s.io
+    kind: Gateway
+    name: airlock-gateway
+    namespace: airlock-gateway
+  listeners:
+  - name: https
+    hostname: webserver-127-0-0-1.nip.io
+    port: 8081
+    protocol: HTTPS
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - kind: Secret
+        name: webserver-tls-cert
+    allowedRoutes:
+      namespaces:
+        from: Same

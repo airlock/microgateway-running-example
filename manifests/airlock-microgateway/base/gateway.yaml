@@ -11,21 +11,13 @@ spec:
       kind: GatewayParameters
       name: gatewayparameters
   gatewayClassName: airlock-microgateway
+  allowedListeners:
+    namespaces:
+      from: All
   listeners:
   - name: http
     port: 8080
     protocol: HTTP
-    allowedRoutes:
-      namespaces:
-        from: All
-  - name: https
-    port: 8081
-    protocol: HTTPS
-    tls:
-      mode: Terminate
-      certificateRefs:
-      - kind: Secret
-        name: gateway-tls-cert
     allowedRoutes:
       namespaces:
         from: All

@@ -9,9 +9,9 @@ spec:
   - "webserver-127-0-0-1.nip.io"
   parentRefs:
   - group: gateway.networking.k8s.io
-    kind: Gateway
-    name: airlock-gateway
-    namespace: airlock-gateway
+    kind: ListenerSet
+    name: webserver
+    namespace: oidc
     sectionName: https
   rules:
   - backendRefs:

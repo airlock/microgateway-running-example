@@ -2,11 +2,11 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: gateway-tls-cert
-  namespace: airlock-gateway
+  name: webserver-tls-cert
+  namespace: oidc
 spec:
-  secretName: gateway-tls-cert
-  commonName: gateway-127-0-0-1.nip.io
+  secretName: webserver-tls-cert
+  commonName: webserver-127-0-0-1.nip.io
   dnsNames:
   - "*.nip.io"
   issuerRef:
