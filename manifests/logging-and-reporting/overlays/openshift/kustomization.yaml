@@ -4,8 +4,15 @@ kind: Kustomization
 
 resources:
 - ../../base
+- grafana-datasource-token.yaml
+- loki
+- loki/airlock-gateway-reader.yaml
 - prometheus
+- rustfs
 - tempo
 
 patches:
+- path: patches/patch-alloy-securitycontext.yaml
+- path: patches/patch-alloy-config.yaml
+- path: patches/patch-grafana-datasource-token.yaml
 - path: patches/patch-replace-datasources.yaml

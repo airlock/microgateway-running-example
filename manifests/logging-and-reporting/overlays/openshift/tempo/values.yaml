@@ -1,7 +1,0 @@
----
-tempo:
-  metricsGenerator:
-    enabled: true
-
-serviceMonitor:
-  enabled: true

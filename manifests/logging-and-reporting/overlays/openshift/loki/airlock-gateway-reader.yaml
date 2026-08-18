@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: lokistack-application-logs-reader-grafana
+  namespace: airlock-gateway
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: lokistack-application-logs-reader
+subjects:
+- kind: ServiceAccount
+  name: grafana
+  namespace: monitoring

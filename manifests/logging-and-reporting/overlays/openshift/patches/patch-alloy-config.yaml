@@ -1,0 +1,138 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alloy
+  namespace: monitoring
+data:
+  config.alloy: |-
+    // OpenShift keeps the Kubernetes base pipeline but authenticates its
+    // Loki and Tempo clients at the operator-managed gateways.
+    local.file "service_account_token" {
+      filename = "/var/run/secrets/kubernetes.io/serviceaccount/token"
+    }
+
+    discovery.kubernetes "pod" {
+      role = "pod"
+    }
+
+    discovery.relabel "airlock" {
+      targets = discovery.kubernetes.pod.targets
+
+      rule {
+        source_labels = ["__meta_kubernetes_namespace"]
+        target_label  = "namespace"
+        action        = "replace"
+      }
+      rule {
+        source_labels = ["__meta_kubernetes_namespace"]
+        target_label  = "kubernetes_namespace_name"
+        action        = "replace"
+      }
+      rule {
+        source_labels = ["__meta_kubernetes_pod_name"]
+        target_label  = "pod"
+        action        = "replace"
+      }
+      rule {
+        source_labels = ["__meta_kubernetes_pod_container_name"]
+        target_label  = "container"
+        action        = "replace"
+      }
+      rule {
+        source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_name"]
+        target_label  = "app"
+        action        = "replace"
+      }
+      rule {
+        source_labels = ["__meta_kubernetes_pod_label_microgateway_airlock_com_engineVersion"]
+        target_label  = "engine_version"
+        action        = "replace"
+      }
+      rule {
+        target_label = "service"
+        replacement  = "airlock-microgateway"
+        action       = "replace"
+      }
+      rule {
+        target_label = "service_name"
+        replacement  = "airlock-microgateway"
+        action       = "replace"
+      }
+    }
+
+    loki.source.kubernetes "airlock" {
+      targets    = discovery.relabel.airlock.output
+      forward_to = [loki.process.airlock.receiver]
+    }
+
+    loki.process "airlock" {
+      stage.static_labels {
+        values = { cluster = "my-cluster" }
+      }
+      forward_to = [loki.write.default.receiver]
+    }
+
+    otelcol.receiver.otlp "apps" {
+      grpc {
+        endpoint = "0.0.0.0:4317"
+      }
+
+      http {
+        endpoint = "0.0.0.0:4318"
+      }
+
+      output {
+        traces = [otelcol.processor.batch.traces.input]
+        logs   = [otelcol.processor.filter.drop_podinfo_debug.input]
+      }
+    }
+
+    otelcol.processor.filter "drop_podinfo_debug" {
+      error_mode = "ignore"
+
+      logs {
+        log_record = [
+          "resource.attributes[\"service.name\"] == \"podinfo\" and severity_number < SEVERITY_NUMBER_INFO",
+        ]
+      }
+
+      output {
+        logs = [otelcol.exporter.loki.otlp.input]
+      }
+    }
+
+    otelcol.processor.batch "traces" {
+      output {
+        traces = [otelcol.exporter.otlp.tempo.input]
+      }
+    }
+
+    otelcol.auth.bearer "tempo" {
+      token = local.file.service_account_token.content
+    }
+
+    otelcol.exporter.otlp "tempo" {
+      client {
+        endpoint = "tempo-tempo-gateway.monitoring.svc.cluster.local:4317"
+        auth     = otelcol.auth.bearer.tempo.handler
+        headers  = { "X-Scope-OrgID" = "application" }
+        tls {
+          insecure_skip_verify = true
+        }
+      }
+    }
+
+    otelcol.exporter.loki "otlp" {
+      forward_to = [loki.write.default.receiver]
+    }
+
+    loki.write "default" {
+      endpoint {
+        url               = "https://lokistack-gateway-http.monitoring.svc.cluster.local:8080/api/logs/v1/application/loki/api/v1/push"
+        tenant_id         = "application"
+        bearer_token_file = "/var/run/secrets/kubernetes.io/serviceaccount/token"
+        tls_config {
+          insecure_skip_verify = true
+        }
+      }
+    }

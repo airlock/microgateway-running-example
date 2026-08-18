@@ -10,20 +10,31 @@ This guide provides the foundational setup required for running Airlock Microgat
 
 ## 🖼️ Architecture Overview
 
-> ⚠️ This setup is created based on **Red Hat OpenShift Local 4.19**
+> ⚠️ This setup was validated with **Red Hat OpenShift Local 4.22.1**.
 
 **Core Components:**
 
 - **Airlock Microgateway** – Data plane security
 - **Prometheus & Grafana** – Metrics and dashboards
-- **Loki & Alloy** – Log aggregation and analysis
-- **LokiStack & Red Hat Cluster Logging** - Log aggregation and analysis ***Red Hat Supported**
+- **Alloy** – Collection of Kubernetes logs and application OTLP data
+- **LokiStack & Loki Operator** – Operator-managed log storage and querying
+- **TempoMonolithic & Tempo Operator** – Operator-managed trace storage and querying
+- **RustFS** – S3-compatible, single-node/single-storage object storage for Loki
 
 ---
 
 ### Airlock Microgateway Requirements
 
 - Review and fulfill all [Airlock Microgateway prerequisites](https://docs.airlock.com/microgateway/latest/#data/1660804711882.html)
+
+### Helm Requirements
+
+The `oc` client included with OpenShift 4.22 embeds Kustomize 5.7.1, which is not compatible with Helm 4 when rendering Helm charts. Install both Helm versions with the following command names:
+
+- `helm` for Helm 4
+- `helm3` for Helm 3
+
+The commands below explicitly select `helm3` when rendering manifests with `oc kustomize`.
 
 ---
 
@@ -50,13 +61,13 @@ Keep the recommended namespace **cert-manager-operator** during install.
 ## 🗄️📜 Deploy Certificate Authority (CA)
 
 ```bash
-oc kustomize --enable-helm manifests/ca | oc apply --server-side -f -
+oc kustomize --enable-helm --helm-command helm3 manifests/ca | oc apply --server-side -f -
 ```
 
 ## 🔐 Deploy Valkey (Session Store)
 
 ```bash
-oc kustomize --enable-helm manifests/valkey-sessionstore/overlays/openshift | oc apply --server-side -f -
+oc kustomize --enable-helm --helm-command helm3 manifests/valkey-sessionstore/overlays/openshift | oc apply --server-side -f -
 
 # Wait until Valkey is up and running
 oc -n valkey rollout status deployment
@@ -64,14 +75,42 @@ oc -n valkey rollout status deployment
 
 ## 📊 Deploy Logging and Monitoring Stack
 
-```bash
-oc kustomize --enable-helm manifests/logging-and-reporting/overlays/openshift | oc apply --server-side -f -
+### Install the Red Hat operators
 
-# Wait until Grafana is up and running
-oc -n monitoring rollout status deployment
+Install these operators from OperatorHub before applying the manifests:
+
+- **Loki Operator**, provided by Red Hat
+- **Tempo Operator**, provided by Red Hat
+
+Wait until both operators are available and confirm that their CRDs exist:
+
+```bash
+oc get csv -A | grep -E 'loki|tempo'
+oc get crd lokistacks.loki.grafana.com tempomonolithics.tempo.grafana.com
 ```
 
-### Create the binding and tokens to access Promethues via Thanos
+The OpenShift overlay uses the operators only on OpenShift. The Kubernetes overlay continues to deploy the community Loki and Tempo Helm charts.
+
+### Storage layout
+
+The example deploys RustFS as an S3-compatible **single node with one storage volume**:
+
+- image: `docker.io/rustfs/rustfs:1.0.0-rc.2`
+- one RustFS replica
+- one `ReadWriteOnce` PVC mounted at `/data`
+- one `loki` bucket, created by a bootstrap Job
+- access key: `airlock`
+- secret key: `Start123!`
+
+The credentials are example credentials and must be changed for any shared or persistent environment. RustFS SNSD and LokiStack size `1x.demo` are intended for this local example, not a highly available production deployment.
+
+The manifests use OpenShift Local's `crc-csi-hostpath-provisioner` storage class. For another cluster, change `storageClassName` in:
+
+- `manifests/logging-and-reporting/overlays/openshift/loki/lokistack.yaml`
+- `manifests/logging-and-reporting/overlays/openshift/rustfs/pvc.yaml`
+- `manifests/logging-and-reporting/overlays/openshift/tempo/tempomonolithic.yaml`
+
+### Grant Grafana access to OpenShift metrics
 
 ```bash
 oc adm policy add-cluster-role-to-user cluster-monitoring-view \
@@ -79,87 +118,67 @@ oc adm policy add-cluster-role-to-user cluster-monitoring-view \
   -n monitoring
 ```
 
-### Replace the example token with your own Token  in the Grafana values.yaml and reapply Grafana
+Loki, Tempo, and Prometheus use the declarative `grafana-datasource-token` service-account token Secret. No token needs to be generated manually or copied into Git.
+
+### Apply the stack
 
 ```bash
-oc create token grafana -n monitoring --duration=2160h > grafana-token.txt #valid for 3 months
+oc kustomize --enable-helm --helm-command helm3 manifests/logging-and-reporting/overlays/openshift | oc apply --server-side -f -
 
-cat grafana-token.txt 
+# Wait for the application components
+oc -n monitoring rollout status deployment/alloy
+oc -n monitoring rollout status deployment/grafana
+oc -n monitoring rollout status deployment/rustfs
 
-oc kustomize --enable-helm manifests/logging-and-reporting/overlays/openshift | oc apply --server-side -f -
+# Wait for operator-managed resources
+oc -n monitoring wait --for=condition=Ready lokistack/lokistack --timeout=10m
+oc -n monitoring wait --for=condition=Ready tempomonolithic/tempo --timeout=10m
+
+# The bucket bootstrap must finish successfully
+oc -n monitoring wait --for=condition=complete job/rustfs-create-loki-bucket --timeout=5m
 ```
+
+The deployment creates:
+
+- a RustFS SNSD deployment and `loki` bucket;
+- a Red Hat `LokiStack` using S3 path-style access to RustFS;
+- a Red Hat `TempoMonolithic` with a 5 Gi persistent volume;
+- OpenShift-authenticated Alloy writers for the Loki and Tempo `application` tenants;
+- Grafana Loki, Tempo, and Prometheus data sources;
+- OpenShift `restricted-v2` security contexts for Alloy and RustFS.
+
+No privileged SCC assignment is required.
+
+Tempo uses the generic tenant name `application`. The Tempo Operator also requires a stable, globally unique `tenantId`; the UUID in `tempomonolithic.yaml` is therefore intentionally opaque and fixed. Do not change it after storing traces, because Tempo uses it as the storage prefix.
+
+### Verify the result
+
+```bash
+oc -n monitoring get lokistack lokistack
+oc -n monitoring get tempomonolithic tempo
+oc -n monitoring get pods,pvc
+
+# LokiStack 1x.demo intentionally has one ingester, so the operator reports
+# InsufficientIngesterReplicas as a resilience warning on this single-node setup.
+oc -n monitoring get lokistack lokistack \
+  -o jsonpath='{range .status.conditions[*]}{.type}={.status} ({.reason}){"\n"}{end}'
+
+# RustFS bucket creation
+oc -n monitoring logs job/rustfs-create-loki-bucket
+```
+
+In Grafana Explore, use OpenShift's canonical namespace label to restrict a query to the Airlock Microgateway logs:
+
+```logql
+{kubernetes_namespace_name="airlock-gateway"}
+```
+
+The Grafana service account receives read access to the complete Loki `application` tenant and read-only permission to list OpenShift projects. Tenant-wide read access is required because Grafana Logs Drilldown performs service and volume discovery before adding namespace filters. Restrict access to Grafana appropriately: anyone who can use this data source can query application logs from every namespace.
+
+Alloy publishes both `service` and `service_name` labels. The latter is required by Grafana Logs Drilldown for its default service discovery query.
 
 > [!NOTE]
-> You can now access
->
-> * Grafana via http://grafana-127-0-0-1.nip.io/
-
-### Install Loki community edition via Operator Hub (from opdev)
-
-Apply RBAC to grant Loki access:
-
-```bash
-kubectl kustomize --enable-helm manifests/logging-and-reporting/overlays/openshift/loki-community | kubectl apply --server-side -f -
-```
-
-Open Loki via installed Operator and apply the following config.
-
-<details>
-<summary>Loki Community config</summary>
-
-```yaml
-apiVersion: charts.example.com/v1alpha1
-kind: Loki
-metadata:
-  name: loki
-  namespace: monitoring
-  annotations:
-    helm.sdk.operatorframework.io/install-disable-crds: 'true'
-spec:
-  global:
-    clusterDomain: cluster.local
-    dnsService: dns-default
-    dnsNamespace: openshift-dns
-
-  rbac:
-    sccEnabled: true
-
-  loki:
-    auth_enabled: false
-    commonConfig:
-      replication_factor: 1
-    storage:
-      type: filesystem
-
-  singleBinary:
-    replicas: 1
-
-  monitoring:
-    dashboards:
-      enabled: false
-    servicemonitor:
-      enabled: true
-    lokiCanary:
-      enabled: false
-    rules:
-      enabled: false
-      alerting: false
-    selfMonitoring:
-      enabled: false
-      grafanaAgent:
-        installOperator: false
-
-  test:
-    enabled: false
-```
-
-</details>
-
-### Install Alloy
-
-```bash
-oc adm policy add-scc-to-user privileged -z alloy -n monitoring
-```
+> Grafana is available at http://grafana-127-0-0-1.nip.io/ in the default OpenShift Local setup. Generic data-source checks can report an error because the operator gateways do not expose every optional upstream endpoint. Explore, Logs Drilldown, and dashboard queries use the supported tenant API paths.
 
 ## 🚀 Install Airlock Microgateway via OperatorHub
 
@@ -177,7 +196,7 @@ kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/re
 ### Airlock Microgateway configure the after it was installed via OperatorHub
 
 ```bash
-oc kustomize --enable-helm manifests/airlock-microgateway/overlays/openshift | oc apply -f -
+oc kustomize --enable-helm --helm-command helm3 manifests/airlock-microgateway/overlays/openshift | oc apply -f -
 
 
 Activate the Podmonitor, by editing the subscription of the Airlock operator:

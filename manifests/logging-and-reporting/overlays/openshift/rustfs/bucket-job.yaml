@@ -1,0 +1,44 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rustfs-create-loki-bucket
+spec:
+  activeDeadlineSeconds: 300
+  backoffLimit: 4
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: rustfs-bucket-bootstrap
+    spec:
+      restartPolicy: OnFailure
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: create-bucket
+        image: quay.io/minio/mc:RELEASE.2025-04-16T18-13-26Z
+        command:
+        - /bin/sh
+        - -c
+        - |
+          until mc --config-dir /tmp/.mc alias set rustfs http://rustfs:9000 "$RUSTFS_ACCESS_KEY" "$RUSTFS_SECRET_KEY"; do
+            sleep 2
+          done
+          mc --config-dir /tmp/.mc mb --ignore-existing rustfs/loki
+        env:
+        - name: RUSTFS_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: rustfs-credentials
+              key: access-key
+        - name: RUSTFS_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: rustfs-credentials
+              key: secret-key
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL

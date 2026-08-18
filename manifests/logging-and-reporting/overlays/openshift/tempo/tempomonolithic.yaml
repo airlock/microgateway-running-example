@@ -1,0 +1,30 @@
+apiVersion: tempo.grafana.com/v1alpha1
+kind: TempoMonolithic
+metadata:
+  name: tempo
+spec:
+  ingestion:
+    otlp:
+      grpc:
+        enabled: true
+      http:
+        enabled: true
+  jaegerui:
+    enabled: true
+    route:
+      enabled: true
+  multitenancy:
+    enabled: true
+    mode: openshift
+    authentication:
+    - tenantName: application
+      tenantId: 531e738b-5c55-493f-b190-66657d175c65
+  observability:
+    metrics:
+      serviceMonitors:
+        enabled: true
+  storage:
+    traces:
+      backend: pv
+      size: 5Gi
+      storageClassName: crc-csi-hostpath-provisioner

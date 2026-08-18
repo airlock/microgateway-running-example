@@ -1,0 +1,92 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: lokistack-application-logs-writer
+rules:
+- apiGroups:
+  - loki.grafana.com
+  resources:
+  - application
+  resourceNames:
+  - logs
+  verbs:
+  - create
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: lokistack-application-logs-writer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: lokistack-application-logs-writer
+subjects:
+- kind: ServiceAccount
+  name: alloy
+  namespace: monitoring
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: lokistack-application-logs-reader
+rules:
+- apiGroups:
+  - loki.grafana.com
+  resources:
+  - application
+  resourceNames:
+  - logs
+  verbs:
+  - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: lokistack-application-logs-reader
+  namespace: monitoring
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: lokistack-application-logs-reader
+subjects:
+- kind: ServiceAccount
+  name: grafana
+  namespace: monitoring
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: lokistack-application-logs-reader-grafana
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: lokistack-application-logs-reader
+subjects:
+- kind: ServiceAccount
+  name: grafana
+  namespace: monitoring
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: lokistack-grafana-project-lister
+rules:
+- apiGroups:
+  - project.openshift.io
+  resources:
+  - projects
+  verbs:
+  - list
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: lokistack-grafana-project-lister
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: lokistack-grafana-project-lister
+subjects:
+- kind: ServiceAccount
+  name: grafana
+  namespace: monitoring
