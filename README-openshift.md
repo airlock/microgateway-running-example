@@ -118,7 +118,7 @@ oc adm policy add-cluster-role-to-user cluster-monitoring-view \
   -n monitoring
 ```
 
-Loki, Tempo, and Prometheus use the declarative `grafana-datasource-token` service-account token Secret. No token needs to be generated manually or copied into Git.
+Loki, Tempo, and Prometheus use the declarative `grafana-datasource-token` service-account token Secret.
 
 ### Apply the stack
 
