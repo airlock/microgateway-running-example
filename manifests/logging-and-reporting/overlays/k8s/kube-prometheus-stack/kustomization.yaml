@@ -8,6 +8,6 @@ helmCharts:
     releaseName: kube-prometheus-stack
     namespace: monitoring
     repo: https://prometheus-community.github.io/helm-charts
-    version: 88.3.0
+    version: 91.9.0
     includeCRDs: true
     valuesFile: values.yaml
